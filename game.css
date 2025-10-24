@@ -1,0 +1,52 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    background-color: blue;
+    display: flex;
+}
+
+main{
+    height: 100%;
+    width: 100%;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: row;
+}
+
+#missile-Container{
+    height: 100%;
+    width: 30%;
+    background-color: green;
+}
+
+#right-Container{
+    background-color: red;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#map{
+    height: 65%;
+}
+
+#selectedMissile{
+    background-color: yellow;
+    flex: 1;
+}
+
+#search-Container{
+    background-color: orange;
+    height: 10%;
+    width: 100%;
+}
+
+#searchField{
+    height: 100%;
+    width: 100%;
+}
