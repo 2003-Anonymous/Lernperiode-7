@@ -6,6 +6,7 @@
     <title>Game</title>
     <link rel="stylesheet" href="game.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
@@ -20,9 +21,50 @@
         </div>
         <div id="right-Container">
             <div id="map"></div>
-            <div id="selectedMissile"></div>
+            <div id="selectedMissile">
+                <div id="model">
+                    <model-viewer 
+                    id="modelViewer"
+                    src=""
+                    camera-controls
+                    field-of-view="80deg"
+                    interaction-prompt="none"
+                    style="width: 100%; height: 100%;"
+                    disable-zoom
+                    camera-orbit="0deg 80deg 1m"   
+                ></model-viewer>
+                </div>
+                    <div id="missileStats-Container">
+                        <div id="leftContent">
+                            <p>Name:</p>
+                            <p>Reichweite:</p>
+                            <p>Schaden:</p>
+                            <p>Radius:</p>
+                            <p>Typ:</p>
+                        </div>
+                        <div id="rightContent">
+                            <p>7,62 x 39 mm</p>
+                            <p>600 Schuss/min</p>
+                            <p>ca. 715m/s</p>
+                            <p>ca. 300 - 400 m</p>
+                            <p>ca. 4,3 kg</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="contextMenu" style="
+            position: absolute;
+            display: none;
+            background: var(--accent-blue);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;">
+            <div class="menu-item" data-type="base">Base</div>
+            <div class="menu-item" data-type="camp">Camp</div>
         </div>
     </main>
     <script src="game.js"></script>
 </body>
 </html>
+

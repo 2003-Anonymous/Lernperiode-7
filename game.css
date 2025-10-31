@@ -1,3 +1,15 @@
+:root {
+  --bg-color: #0a192f;
+  --accent-blue: #1e3a8a;
+  --metal-silver: #a0a0a0;
+  --metal-gradient: linear-gradient(145deg, #9ea7b0, #c0c5cc);
+  --text-color: #e2e8f0;
+  --highlight: #3b82f6;
+}
+
+*{
+    box-sizing: border-box;
+}
 html, body{
     margin: 0;
     padding: 0;
@@ -13,40 +25,107 @@ body{
 main{
     height: 100%;
     width: 100%;
-    background-color: lightblue;
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: row;
 }
 
+
 #missile-Container{
     height: 100%;
     width: 30%;
-    background-color: green;
+    background-color: var(--bg-color);
+    border: 10px solid var(--metal-silver);
+}
+
+#missile-Container li{
+    height: 20px;
+    background-color: var(--accent-blue);
+    color: var(--metal-silver);
+}
+
+#missile-Container li:hover{
+    background-color: var(--highlight);
+    color: black;
 }
 
 #right-Container{
-    background-color: red;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 #map{
-    height: 65%;
+    flex: 2;
+    border-top: 10px solid var(--metal-silver);
+    border-right: 10px solid var(--metal-silver);
 }
 
 #selectedMissile{
-    background-color: yellow;
+    background-color: var(--accent-blue);
     flex: 1;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 10px solid var(--metal-silver);
+    border-right: 10px solid var(--metal-silver);
+    border-top: 10px solid var(--metal-silver);
 }
 
 #search-Container{
     background-color: orange;
     height: 10%;
     width: 100%;
+    margin-bottom: 0;
 }
 
 #searchField{
     height: 100%;
     width: 100%;
+    border-bottom: 10px solid var(--metal-silver);
+    box-sizing: none;
+}
+
+#model{
+    background-color: var(--bg-color);
+    width: 50%;
+    height: 100%;
+}
+
+#missileStats-Container{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    height: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+    background-color: var(--bg-color);
+    color: var(--metal-silver);
+}
+
+#missileList{
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+}
+
+#missileList li{
+    margin: 0;
+    padding: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+#rightContent{
+    margin-left: 30px;
+}
+
+#contextMenu{
+    width: 100px;
+    height: 100px;
+    z-index: 1000;
+}
+
+.menu-item:hover{
+    background-color: var(--highlight);
 }
