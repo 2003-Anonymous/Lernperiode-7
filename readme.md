@@ -21,12 +21,13 @@ Heute habe ich eine Skizze meiner verschiedenen HTML-Seiten erstellt und ich hab
 
 ## 31.10.
 
+- [ ] Die Webseite mit den richtigen grafisch anschaulicher gestalten.
 - [ ] Die Liste mit den ICBMs wird automatisch erstellt.
 - [ ] Programmieren, dass man Marker(Base) mit Rechtsklick auf der Karte hinzufügen kann.
-- [ ] Den Beispielracketen noch Stats hinzufügen, wie z.B. Reichweite.
 - [ ] Wenn man eine Rackete anklickt, soll sie unter der Karte mit den Stats angezeigt werden.
 
 ✍️ Heute habe ich... (50-100 Wörter)
 
 ☝️ Vergessen Sie nicht, Ihren Code auf github hochzuladen
+
 
