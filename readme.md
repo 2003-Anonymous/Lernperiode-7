@@ -30,11 +30,19 @@ Heute habe ich die Webseite anschaulicher gestaltet. Die Farben und das Design i
 
 
 ## 07.11.25
-- [ ] Programmieren, dass die Stats der Rackete unter der Karte angezeigt werden.
-- [ ] Wenn eine Rackete in der Liste ausgewählt wird, soll um die Base ein Kreis entstehen, der die Reichweite anzeigt.
-- [ ] Wenn man in diesem Bereich mit Linksklick einen Marker setzt, soll dort ein Kreis entstehen, der den Explosionsradius anzeigt.
+- [x] Programmieren, dass die Stats der Rackete unter der Karte angezeigt werden.
+- [x] Wenn eine Rackete in der Liste ausgewählt wird, soll um die Base ein Kreis entstehen, der die Reichweite anzeigt.
+- [x] Wenn man in diesem Bereich mit Linksklick einen Marker setzt, soll dort ein Kreis entstehen, der den Explosionsradius anzeigt.
 
-☝️ Vergessen Sie nicht, Ihren Code auf github hochzuladen
+Heute habe ich programmiert, dass unter der Karte die Stats der Rackete angezeigt werden. Zudem wird um die Base ein grüner Kreis erstellt. Dieser hat den Radius der Reichweite der Rackete. Wenn man jetzt über die Karte hovert, wird ein roter Kreis angezeigt, welcher die Zerstörung der Rackete anzeigt. Wenn man mit dem Mauszeiger die Karte verlässt, wird dieser Kreis unsichtbar und wieder sichtbar, sobald man den Mauszeiger wieder über die Karte bewegt. Innerhalb des grünen Kreises kann man den roten Kreis platzieren, jedoch ausserhalb nicht. Wenn man dann auf den Launchbutton klickt, wird ein Racketenicon bei der Base erstellt. Dieses fliegt dann zum markierten Ziel und verschwindet, wenn das Ziel erreicht wurde. Der Zielkreis wird dann schwarz. Es gibt aber noch ein kleines Problem und zwar wenn man mehrere Ziele gesetzt hat, wird nur das letzte angegriffen. Das mit der Animation war nicht so einfach und ich habe viel hilfe benötigt. Am Ende hat es mir aber viel gebracht und ich habe jetzt auch verstanden, wie der nächste Punkt der Rackete automatisch berrechnet wird und auch wie man die Dauer der Animation so steuert, dass sie unabhängig von der Leistung des Computers ist, sondern auf der vergangenen Dauter basiert.
+
+
+## 14.11.25
+- [ ] Programmieren, dass alle markierten Ziele in einer Liste gespeichert werden.
+- [ ] Hinzufügen, dass alle Ziele aus der Liste gleichzeitig angegriffen werden.
+- [ ] Einen Tab neben den Racketen erstellen, wo man Gebäude auswählen kann, welche man auf der Karte platzieren kann.
+- [ ] Dort soll man am Anfang auch seine Base platzieren können.
+
 
 
 
