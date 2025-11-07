@@ -129,3 +129,8 @@ main{
 .menu-item:hover{
     background-color: var(--highlight);
 }
+
+#launchBtn{
+    width: 50px;
+    height: 30px;
+}
