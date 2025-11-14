@@ -12,6 +12,10 @@
 <body>
     <main>
         <div id="missile-Container">
+            <div id="menu-Container">
+                <div id="menu_missile" class="menu_block">Missiles</div>
+                <div id="menu_building" class="menu_block">Buildings</div>
+            </div>
             <div id="search-Container">
                 <input id="searchField" type="search" placeholder="Search...">
                 <ul id="missileList">
@@ -32,7 +36,8 @@
                     style="width: 100%; height: 100%;"
                     disable-zoom
                     camera-orbit="0deg 80deg 1m"   
-                ></model-viewer>
+                    ></model-viewer>
+                
                 <button id="launchBtn">Launch</button>
                 </div>
                     <div id="missileStats-Container">
@@ -54,16 +59,7 @@
                 </div>
             </div>
         </div>
-        <div id="contextMenu" style="
-            position: absolute;
-            display: none;
-            background: var(--accent-blue);
-            color: white;
-            padding: 5px;
-            border-radius: 5px;">
-            <div class="menu-item" data-type="base">Base</div>
-            <div class="menu-item" data-type="camp">Camp</div>
-        </div>
+        
     </main>
     <script src="game.js"></script>
 </body>
