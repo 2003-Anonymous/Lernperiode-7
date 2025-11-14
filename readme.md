@@ -34,15 +34,23 @@ Heute habe ich die Webseite anschaulicher gestaltet. Die Farben und das Design i
 - [x] Wenn eine Rackete in der Liste ausgewählt wird, soll um die Base ein Kreis entstehen, der die Reichweite anzeigt.
 - [x] Wenn man in diesem Bereich mit Linksklick einen Marker setzt, soll dort ein Kreis entstehen, der den Explosionsradius anzeigt.
 
-Heute habe ich programmiert, dass unter der Karte die Stats der Rackete angezeigt werden. Zudem wird um die Base ein grüner Kreis erstellt. Dieser hat den Radius der Reichweite der Rackete. Wenn man jetzt über die Karte hovert, wird ein roter Kreis angezeigt, welcher die Zerstörung der Rackete anzeigt. Wenn man mit dem Mauszeiger die Karte verlässt, wird dieser Kreis unsichtbar und wieder sichtbar, sobald man den Mauszeiger wieder über die Karte bewegt. Innerhalb des grünen Kreises kann man den roten Kreis platzieren, jedoch ausserhalb nicht. Wenn man dann auf den Launchbutton klickt, wird ein Racketenicon bei der Base erstellt. Dieses fliegt dann zum markierten Ziel und verschwindet, wenn das Ziel erreicht wurde. Der Zielkreis wird dann schwarz. Es gibt aber noch ein kleines Problem und zwar wenn man mehrere Ziele gesetzt hat, wird nur das letzte angegriffen. Das mit der Animation war nicht so einfach und ich habe viel hilfe benötigt. Am Ende hat es mir aber viel gebracht und ich habe jetzt auch verstanden, wie der nächste Punkt der Rackete automatisch berrechnet wird und auch wie man die Dauer der Animation so steuert, dass sie unabhängig von der Leistung des Computers ist, sondern auf der vergangenen Dauter basiert.
+Heute habe ich programmiert, dass unter der Karte die Stats der Rackete angezeigt werden. Zudem wird um die Base ein grüner Kreis erstellt. Dieser hat den Radius der Reichweite der Rackete. Wenn man jetzt über die Karte hovert, wird ein roter Kreis angezeigt, welcher die Zerstörung der Rackete anzeigt. Wenn man mit dem Mauszeiger die Karte verlässt, wird dieser Kreis unsichtbar und wieder sichtbar, sobald man den Mauszeiger wieder über die Karte bewegt. Innerhalb des grünen Kreises kann man den roten Kreis platzieren, jedoch ausserhalb nicht. Wenn man dann auf den Launchbutton klickt, wird ein Racketenicon bei der Base erstellt. Dieses fliegt dann zum markierten Ziel und verschwindet, wenn das Ziel erreicht wurde. Der Zielkreis wird dann schwarz. Es gibt aber noch ein kleines Problem und zwar wenn man mehrere Ziele gesetzt hat, wird nur das letzte angegriffen. Das mit der Animation war nicht so einfach und ich habe viel hilfe benötigt. Am Ende hat es mir aber viel gebracht und ich habe jetzt auch verstanden, wie der nächste Punkt der Rackete automatisch berrechnet wird und auch wie man die Dauer der Animation so steuert, dass sie unabhängig von der Leistung des Computers ist, sondern auf der vergangenen Dauer basiert.
 
 
 ## 14.11.25
-- [ ] Programmieren, dass alle markierten Ziele in einer Liste gespeichert werden.
-- [ ] Hinzufügen, dass alle Ziele aus der Liste gleichzeitig angegriffen werden.
-- [ ] Einen Tab neben den Racketen erstellen, wo man Gebäude auswählen kann, welche man auf der Karte platzieren kann.
+- [x] Programmieren, dass alle markierten Ziele in einer Liste gespeichert werden.
+- [x] Hinzufügen, dass alle Ziele aus der Liste gleichzeitig angegriffen werden.
+- [x] Einen Tab neben den Racketen erstellen, wo man Gebäude auswählen kann, welche man auf der Karte platzieren kann.
 - [ ] Dort soll man am Anfang auch seine Base platzieren können.
 
+Heute habe ich programmiert, dass alle Ziele, die man setzt, in einer Liste gespeichert und gleichzeitig angegriffen werden, wenn man den "Launch"-Button klickt. Dann habe ich noch ein Menu oberhalb der Suchleiste erstellt, wo man zwischen den Racketen und Gebäuden wechseln kann. Wenn man ein Gebäude auswählt, kann man es mit Linksklick der Karte hinzufügen. Dadurch musste ich die Funktion, welche die Liste erstellt, noch ein wenig abändern, dass selectedMissile und selectedBuilding richtig gesetzt werden und unter der Karte auch die richtigen Infos angezeigt werden. Zudem musste ich noch ergänzen, dass der rote Kreis nur erscheint, wenn eine Rackete ausgewählt ist und nicht auch, wenn man ein Gebäude platzieren will. Das mit dem Gebäudemarker hinzufügen war am Anfang ein wenig kompliziert, da ich an die vorhin genannten Dinge denken und einiges am Code umstellen musste. Jetzt funktioniert es aber einwandfrei. Zum schluss habe ich noch das Menu entfert, welches erscheint, wenn man die rechte Maustaste auf der Karte klickt. Dieses wird nun nicht mehr benötigt.
+
+
+## 21.11.25
+- [ ] Die Racketen sollen von dem Racketensilo abgeschossen werden und nicht mehr von der Basis.
+- [ ] Sollte die Basis zerstört werden, also wenn sie im Explosionsradius liegt, soll das Spiel vorbei sein.
+- [ ] Eine Auswahl der platzierten Racketensilos hinzufügen.
+- [ ] In dieser Auswahl soll man auswählen können, von welchem Silo man schissen möchte.
 
 
 
