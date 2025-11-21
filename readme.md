@@ -41,16 +41,21 @@ Heute habe ich programmiert, dass unter der Karte die Stats der Rackete angezeig
 - [x] Programmieren, dass alle markierten Ziele in einer Liste gespeichert werden.
 - [x] Hinzufügen, dass alle Ziele aus der Liste gleichzeitig angegriffen werden.
 - [x] Einen Tab neben den Racketen erstellen, wo man Gebäude auswählen kann, welche man auf der Karte platzieren kann.
-- [ ] Dort soll man am Anfang auch seine Base platzieren können.
+- [x] Dort soll man am Anfang auch seine Base platzieren können.
 
 Heute habe ich programmiert, dass alle Ziele, die man setzt, in einer Liste gespeichert und gleichzeitig angegriffen werden, wenn man den "Launch"-Button klickt. Dann habe ich noch ein Menu oberhalb der Suchleiste erstellt, wo man zwischen den Racketen und Gebäuden wechseln kann. Wenn man ein Gebäude auswählt, kann man es mit Linksklick der Karte hinzufügen. Dadurch musste ich die Funktion, welche die Liste erstellt, noch ein wenig abändern, dass selectedMissile und selectedBuilding richtig gesetzt werden und unter der Karte auch die richtigen Infos angezeigt werden. Zudem musste ich noch ergänzen, dass der rote Kreis nur erscheint, wenn eine Rackete ausgewählt ist und nicht auch, wenn man ein Gebäude platzieren will. Das mit dem Gebäudemarker hinzufügen war am Anfang ein wenig kompliziert, da ich an die vorhin genannten Dinge denken und einiges am Code umstellen musste. Jetzt funktioniert es aber einwandfrei. Zum schluss habe ich noch das Menu entfert, welches erscheint, wenn man die rechte Maustaste auf der Karte klickt. Dieses wird nun nicht mehr benötigt.
 
 
 ## 21.11.25
-- [ ] Die Racketen sollen von dem Racketensilo abgeschossen werden und nicht mehr von der Basis.
+- [x] Die Racketen sollen von dem Racketensilo abgeschossen werden und nicht mehr von der Basis.
+- [x] Eine Auswahl der platzierten Racketensilos hinzufügen.
+- [x] In dieser Auswahl soll man auswählen können, von welchem Silo man schissen möchte.
+
+Heute habe ich die Basis, welche vorher schon am Anfang da war, entfernt. Jetzt muss man zuerst eine Basis bauen. Man kann immer nur eine Basis bauen und diese ist notwendig, damit man überhaubt Racketen abfeuern kann. Dann habe ich noch hinzugefügt, dass die platzierten Silos in einer Liste neben dem Tab "Buildings" angezeigt werden. Diese Liste sind nummeriert. Wenn man ein Silo anklickt, ist es ausgewählt und man kann von diesem aus Racketen abschiessen. Die Reichweite der ausgewählten Rackete wird dann von dem ausgewählten Silo angezeigt. Zuerst wollte ich, dass bei allen Silos die Reichweite gleichzeitig angezeigt wird und die Rackete vom nächsten Silo abgeschossen wird. Ich habe mich dann aber umentschieden, weil ich vorhabe, verschiedene Silotypen einzufügen, von denen man verschiedene Racketen abschiessen kann, je nach Typ.
+
+## 28.11.25
+
 - [ ] Sollte die Basis zerstört werden, also wenn sie im Explosionsradius liegt, soll das Spiel vorbei sein.
-- [ ] Eine Auswahl der platzierten Racketensilos hinzufügen.
-- [ ] In dieser Auswahl soll man auswählen können, von welchem Silo man schissen möchte.
-
-
-
+- [ ] Hinzufügen, dass das ausgewählte Silo angezeigt wird(entweder HTML-Objekt mit Text oder optisch am Silo-Icon)
+- [ ] Ein weiteres Gebäude(Racketenabwehr) hinzufügen, welches eine Reichweite hat und auch Platziert werden kann.
+- [ ] Diese Racketenabwehr soll Racketen abschiessen können, welche in Reichweite sind.
