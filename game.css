@@ -165,4 +165,9 @@ main{
 
 #menu_building{
     border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+#menu_silo{
+    border-left: 2px solid black;
 }
