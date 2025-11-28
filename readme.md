@@ -55,7 +55,10 @@ Heute habe ich die Basis, welche vorher schon am Anfang da war, entfernt. Jetzt 
 
 ## 28.11.25
 
-- [ ] Sollte die Basis zerstört werden, also wenn sie im Explosionsradius liegt, soll das Spiel vorbei sein.
-- [ ] Hinzufügen, dass das ausgewählte Silo angezeigt wird(entweder HTML-Objekt mit Text oder optisch am Silo-Icon)
-- [ ] Ein weiteres Gebäude(Racketenabwehr) hinzufügen, welches eine Reichweite hat und auch Platziert werden kann.
-- [ ] Diese Racketenabwehr soll Racketen abschiessen können, welche in Reichweite sind.
+- [x] Sollte die Basis zerstört werden, also wenn sie im Explosionsradius liegt, soll das Spiel vorbei sein.
+- [x] Hinzufügen, dass das ausgewählte Silo angezeigt wird(entweder HTML-Objekt mit Text oder optisch am Silo-Icon)
+- [x] Ein weiteres Gebäude(Racketenabwehr) hinzufügen, welches eine Reichweite hat und auch Platziert werden kann.
+- [x] Diese Racketenabwehr soll Racketen abschiessen können, welche in Reichweite sind.
+
+Heute habe ich ein dunkles Overlay mit einem "Game over!" Button programmiert, welches angezeigt wird, wenn die Base im Explosionsradius liegt. Wenn man auf den Button clickt, wird die Seite neu geladen. Das ausgewählte Silo wird jetzt unten im Stats-Container unter der Karte angezeigt. Darunter befindet sich der Launch-Button. Dann habe ich noch eine Racketenabwehr programmiert, welche man auch platzieren kann. Die Reichweite wird durch einen blauen Kreis angezeigt. Wenn eine Rackete durch diesen Kreis fliegt, gibt es bei jedem Frame eine 2% Chance, dass die Rackete zerstört wird. Diese Wahrscheindlichkeit habe ich für jeden Frame gesetzt, damit es realistischer wirkt und die Rackete nicht einfach z.B. zu 50% beim betreten des blauen Kreises zerstört wird.
+
