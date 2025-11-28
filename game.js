@@ -10,79 +10,25 @@ var map = L.map('map').setView([47.3769, 8.5417], 13);
         //     .bindPopup("Oberkulm")
         //     .openPopup();
 
-const missiles = [
-    { 
-        name: "ATACMS (USA)",
-        type: "cruise",
-        warhead: 230,
-        radius: 300,
-        range: 300000,
-        src: "Models/fattah-1.glb"
-    },
-    { 
-        name: "SCUD-B (UdSSR)",
-        type: "ballistic",
-        warhead: 985,
-        radius: 750,
-        range: 300000
-    },
-    { 
-        name: "Iskander-M (Russland)",
-        type: "tactical ballistic",
-        warhead: 600,
-        radius: 450,
-        range: 500000
-    },
-    { 
-        name: "Tomahawk (USA)",
-        type: "cruise missile",
-        warhead: 450,
-        radius: 400,
-        range: 1600000
-    },
-    {
-        name: "DF-21 (China)",
-        type: "middlerange ballistic",
-        warhead: 600,
-        radius: 1500,
-        range: 1500000
-    },
-    {
-        name: "AN602",
-        type: "thermobaric",
-        warhead: 57000,
-        radius: 35000,
-        range: 1000000
-    },
-    {
-        name: "RS-28 Sarmat (Russland)",
-        type: "dreistufige Feststoffrakete",
-        warhead: 10000,
-        radius: 5000,
-        range: 18000000
-    }
-]
+let missiles = [];
+fetch("Data/missiles.json")
+    .then(response => response.json())
+    .then(data =>{
+        missiles = data;
+    })
+    .catch(error => console.error(error));
 
-const buildings = [
-    {
-        name: "Base",
-        type: "base",
-        icon: 'Images/barracks.png',
-        range: 10000000
-    },
-    {
-        name: "Missilesilo",
-        type: "attack",
-        icon: 'Images/MissileSilo.png'
-    },
-    {
-        name: "Airdefense",
-        type: "defense",
-        icon: 'Images/target.png'
-    }
-]
-let silos = [];
-let targets = [];
+let buildings = [];
+fetch("Data/buildings.json")
+    .then(response => response.json())
+    .then(data => {
+        buildings = data;
+        createList(buildings);
+    })
+    .catch(error => console.error(error));
+
+
+
 
 var BaseIcon = L.icon({
     iconUrl: 'Images/barracks.png',    
@@ -91,20 +37,19 @@ var BaseIcon = L.icon({
     popupAnchor: [0, -40]     
 });
 
-function createIcon(url){
+function createIcon(url, x, y){
     var building_icon = L.icon({
         iconUrl: url,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15]
+        iconSize: [x, y],
+        iconAnchor: [(x/2), (y/2)]
     });
     return building_icon;
 }
 
 
-// let base = L.marker([47.3769, 8.5417], { icon: BaseIcon })
-//     .addTo(map)
-//     .bindPopup("Base");
-
+let silos = [];
+let targets = [];
+let airdefenses = [];
 let selectedMissile;
 let selectedBuilding;
 let selectedSilo;
@@ -114,6 +59,9 @@ const menu_building = document.getElementById("menu_building");
 const menu_silo = document.getElementById("menu_silo");
 const missileList = document.getElementById("missileList");
 const searchField = document.getElementById("searchField");
+const siloBox = document.getElementById("selectedSilo");
+const gameOverOverlay = document.getElementById("gameOverOverlay");
+const gameOver = document.getElementById("gameOver");
 let previewRadius;
 let rangeCircle;
 let selectedElement;
@@ -122,22 +70,35 @@ let target;
 let menuSelected = "building";
 let base;
 
+function hideElement(element){
+    element.style.visibility = 'hidden';
+}
+
+function showElement(element){
+    element.style.visibility = 'visible';
+}
+
 function createList(list){
     missileList.innerHTML = "";
 
     list.forEach ((element) => {
+
         const newLi = document.createElement("li");
         newLi.textContent = element.name;
+
         newLi.addEventListener('click', () =>{
-            
-            
-            
-            
+
             const name = document.getElementById("name_field");
             const type = document.getElementById("type_field");
+            const range = document.getElementById("range_field");
             const damage = document.getElementById("damage_field");
             const radius = document.getElementById("radius_field");
-            const range = document.getElementById("range_field");
+
+            const nameLabel = document.getElementById("name_label");
+            const typeLabel = document.getElementById("type_label");
+            const rangeLabel = document.getElementById("range_label");
+            const damageLabel = document.getElementById("damage_label");
+            const radiusLabel = document.getElementById("radius_label");
 
             name.textContent = element.name;
             type.textContent = element.type;
@@ -146,146 +107,159 @@ function createList(list){
                 selectedMissile = element;
                 selectedBuilding = null;
 
-                damage.style.display = 'block';
-                radius.style.display = 'block';
-                range.style.display = 'block';
+                showElement(damage);
+                showElement(radius);
+                showElement(range);
+                showElement(damageLabel);
+                showElement(radiusLabel);
+                showElement(rangeLabel);
                 damage.textContent = element.warhead;
                 radius.textContent = element.radius;
                 range.textContent = element.range;
 
-                if(previewRadius){
-                     map.removeLayer(previewRadius);                    
-                    previewRadius = null;
-                }
-                previewRadius = L.circle([0, 0], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.3,
-                    radius: selectedMissile.radius,
-                    weight: 1
-                }).addTo(map);
+                createPreviewCircles();
 
-                if(previewCenter){
-                    map.removeLayer(previewCenter);
-                    previewCenter = null;
-                }
-                previewCenter = L.circleMarker([0, 0],{
-                    color: 'red',
-                    fillColor: '#f03',
-                    radius: 2,
-                }).addTo(map);
-
-                
-                if(rangeCircle){
-                    map.removeLayer(rangeCircle);
-                    
-                    rangeCircle = null;
-                }
-
-                if(selectedMissile && selectedSilo){
-                    rangeCircle = L.circle(selectedSilo.marker.getLatLng(), {
-                        color: 'green',
-                        fillColor: '#0fa11b',
-                        fillOpacity: 0.3,
-                        radius: selectedMissile.range
-                    }).addTo(map);
-                    
-                }
-                else {
-                    alert("Bitte zuerst ein Silo auswählen!");
-                }
-                    
-                    
-                
-                
             } else if(menuSelected === "building"){
                 selectedBuilding = element;
                 selectedMissile = null;
 
-                damage.style.display = 'none';
-                radius.style.display = 'none';
-                range.style.display = 'none';
+                hideElement(damage);
+                hideElement(radius);
+                hideElement(damageLabel);
+                hideElement(radiusLabel);
 
-                if(previewRadius){
-                    map.removeLayer(previewRadius);
-                    previewRadius = null;
+                if(selectedBuilding.range){
+                    showElement(rangeLabel);
+                    showElement(range);
+                    range.textContent = selectedBuilding.range;
+                } else {
+                    hideElement(rangeLabel);
+                    hideElement(range);
                 }
-                if(previewCenter){
-                    map.removeLayer(previewCenter);
-                    previewCenter = null;
-                }
-                if(rangeCircle){
-                    map.removeLayer(rangeCircle);
-                    rangeCircle = null;
-                }
+                
+
+                deletePreviewCircles();
+
             } else if(menuSelected === "silo"){
                 selectedSilo = element;
+                siloBox.textContent = "Silo: " + selectedSilo.name;
+                hideElement(range);
+                hideElement(damage);
+                hideElement(radius);
             }
 
             if(element.src) viewer.src = element.src;
 
-
-            
         });
         missileList.appendChild(newLi);
     });  
 }
 
+function createPreviewCircles(){
+    if(previewRadius){
+        map.removeLayer(previewRadius);                    
+        previewRadius = null;
+    }
+    previewRadius = L.circle([0, 0], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.3,
+        radius: selectedMissile.radius,
+        weight: 1
+    }).addTo(map);
 
-// L.circle([47.3769, 8.5417], {
-//     color: 'red',
-//     fillColor: '#f03',
-//     fillOpacity: 0.3,
-//     radius: 2500
-// }).addTo(map).bindPopup("25 km Umkreis von Zürich");
+    if(previewCenter){
+        map.removeLayer(previewCenter);
+        previewCenter = null;
+    }
+    previewCenter = L.circleMarker([0, 0],{
+        color: 'red',
+        fillColor: '#f03',
+        radius: 2,
+    }).addTo(map);
 
+    
+    if(rangeCircle){
+        map.removeLayer(rangeCircle);
+        
+        rangeCircle = null;
+    }
 
+    if(selectedMissile && selectedSilo){
+        rangeCircle = L.circle(selectedSilo.marker.getLatLng(), {
+            color: 'green',
+            fillColor: '#0fa11b',
+            fillOpacity: 0.3,
+            radius: selectedMissile.range
+        }).addTo(map);
+        
+    }
+    else {
+        alert("Bitte zuerst ein Silo auswählen!");
+    }
+}
 
+function deletePreviewCircles(){
+    if(previewRadius){
+        map.removeLayer(previewRadius);
+        previewRadius = null;
+    }
+    if(previewCenter){
+        map.removeLayer(previewCenter);
+        previewCenter = null;
+    }
+    if(rangeCircle){
+        map.removeLayer(rangeCircle);
+        rangeCircle = null;
+    }
+}
 
+function createCircles(position){
+    if(previewRadius){
+        radius = L.circle(position, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.3,
+            radius: selectedMissile.radius,
+            weight: 1
+        }).addTo(map);
+        target = {
+            radius: radius,
+            center: null
+        }
+        targets.push(target);
+    }
 
+    if(previewCenter){
+        center = L.circle(position,{
+            color: 'red',
+            fillColor: '#f03',
+            radius: 4,
+            weight: 1
+        }).addTo(map);
 
-
-
+        target.center = center;
+    }
+    map.removeLayer(previewCenter);
+    previewCenter = null;
+    map.removeLayer(previewRadius);
+    previewRadius = null;
+}
 // Wenn du auf die Karte klickst, füge einen Marker hinzu
 map.on('click', function(e) {
     if(base != null){
         
         if(selectedMissile){
             let distance = map.distance(selectedSilo.marker.getLatLng(), e.latlng);
-            if(distance < selectedMissile.range){
 
-                if(previewRadius){
-                    radius = L.circle(e.latlng, {
-                        color: 'red',
-                        fillColor: '#f03',
-                        fillOpacity: 0.3,
-                        radius: selectedMissile.radius,
-                        weight: 1
-                    }).addTo(map);
-                    target = radius;
-                    targets.push(target);
-                }
-            
-                if(previewCenter){
-                    L.circle(e.latlng,{
-                        color: 'red',
-                        fillColor: '#f03',
-                        radius: 4,
-                        weight: 1
-                    }).addTo(map);
-                }
-
-                map.removeLayer(previewCenter);
-                previewCenter = null;
-                map.removeLayer(previewRadius);
-                previewRadius = null;
+            if(distance <= selectedMissile.range){
+                createCircles(e.latlng);
             }
         }
-        
     }
 
     if(selectedBuilding){
-        let icon = createIcon(selectedBuilding.icon)
+        let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
 
         if(selectedBuilding.name === "Base"){
             if(base) map.removeLayer(base);
@@ -294,40 +268,33 @@ map.on('click', function(e) {
             let siloMarker = L.marker(e.latlng, {icon: icon}).addTo(map);
             let silo = {
                 name: selectedBuilding.name + " " + (silos.length + 1),
-                marker: siloMarker
+                marker: siloMarker,
+                type: "attack"
             }
             silos.push(silo);
-        } else {
-            L.marker(e.latlng, {icon: icon}).addTo(map);
+        } else if(selectedBuilding.name === "Airdefense"){
+            let airdefenseMarker = L.marker(e.latlng, {icon: icon}).addTo(map);
+            
+            let airdefense = {
+                name: selectedBuilding.name + " " + (airdefenses.length + 1),
+                marker: airdefenseMarker,
+                range: 100000,
+                rangeCircle: null
+            }
+            airdefenses.push(airdefense);
+
+            let airdefenseRange = L.circle(e.latlng, {
+                color: 'blue',
+                fillColor: '#0f28e5ff',
+                fillOpacity: 0.3,
+                radius: airdefense.range
+            }).addTo(map);
+
+            airdefense.rangeCircle = airdefenseRange;
         }
         
     }
 });
-
-
-
-
-
-
-
-let tempMarker = "";
-map.on('contextmenu', function(e){
-    const menu = document.getElementById("contextMenu");
-    menu.style.display = 'block';
-
-    
-    //Mauskoordinaten, wird nicht vom Zoom beeinflusst
-    menu.style.left = e.originalEvent.clientX + 5 + 'px';
-    menu.style.top = e.originalEvent.clientY + 5 + 'px';
-
-    menu.dataset.lat = e.latlng.lat;
-    menu.dataset.lng = e.latlng.lng;
-
-    tempMarker = L.marker(e.latlng).addTo(map);
-});
-
-
-
 
 map.on('mousemove', (e) => {
     if(previewRadius){
@@ -339,26 +306,33 @@ map.on('mousemove', (e) => {
         previewCenter.setLatLng(e.latlng);
     }
 });
+
 map.on('mouseout', () => {
     if(previewRadius){
-        previewRadius.setStyle({opacity: 0, fillOpacity: 0});
+        hideMarker(previewRadius);
     }
     if(previewCenter){
-        previewCenter.setStyle({opacity: 0, fillOpacity: 0});
+        hideMarker(previewCenter);
     }
 });
+
+function hideMarker(element){
+    element.setStyle({opacity: 0, fillOpacity: 0});
+}
 
 //lineare interpolation
 function lerp(a, b, t){ return a + (b - a) * t; }
 function launchMissile(start, target, durationSec = 3){
     const startLatLng = start.marker.getLatLng();
-    const targetLatLng = target.getLatLng();
+    const targetLatLng = target.center.getLatLng();
 
     let missileIcon = L.icon({iconUrl: 'Images/missile.png', iconSize:[20,20], iconAnchor:[10,10]});
     const missile = L.marker(startLatLng, { icon: missileIcon }).addTo(map);
 
     const startTime = performance.now();
     const durationMs = durationSec * 1000;
+
+    let missileDestroyed = false;
 
     function step(now){
         const elapsed = now - startTime;
@@ -370,14 +344,40 @@ function launchMissile(start, target, durationSec = 3){
         const lng = lerp(startLatLng.lng, targetLatLng.lng, t);
         missile.setLatLng([lat, lng]);
 
+        airdefenses.forEach((a) =>{
+            let distanceToA = map.distance(a.marker.getLatLng(), missile.getLatLng());
+
+            if(distanceToA < a.range){
+                if(Math.random() < 0.02){
+                    missile.remove();
+                    missileDestroyed = true;
+                }
+            }
+        })
+
         if(t < 1){
             requestAnimationFrame(step);
+            
         } else {
             missile.remove();
-            target.setStyle({ fillColor: 'black', color: 'black'});
+            if(!missileDestroyed){
+                target.radius.setStyle({ fillColor: 'black', color: 'black'});
+                target.center.setStyle({fillcolor: 'black', color: 'black'});
+                
+                targets = targets.filter(t => t !== target);
+
+
+                let distanceToBase = map.distance(base.getLatLng(), target.center.getLatLng());
+
+                if(distanceToBase <= selectedMissile.radius){
+                    gameOver.style.display = "flex";
+                    gameOverOverlay.style.display = "flex";
+                }
+            }
         }
     }
     requestAnimationFrame(step);
+    
 }
 
 const launchBtn = document.getElementById("launchBtn");
@@ -391,12 +391,9 @@ launchBtn.addEventListener('click', () =>{
         targets.forEach((t) => {
             launchMissile(selectedSilo, t, 3);
         })
-        targets = [];
     }
-    
 });
 
-createList(buildings);
 
 menu_missile.addEventListener('click', () => {
     createList(missiles);
@@ -411,6 +408,10 @@ menu_building.addEventListener('click', () => {
 menu_silo.addEventListener('click', () => {
     createList(silos);
     menuSelected = "silo";
+})
+
+gameOver.addEventListener('click', () =>{
+    location.reload();
 })
 
 searchField.addEventListener('input', () =>{
@@ -436,7 +437,5 @@ searchField.addEventListener('input', () =>{
     }
 })
 
-// function menu_building(){
-//     createList(buildings);
-// }
+
 //<a href="https://www.flaticon.com/free-icons/missile" title="missile icons">Missile icons created by Nhor Phai - Flaticon</a>

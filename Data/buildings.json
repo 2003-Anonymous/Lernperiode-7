@@ -1,0 +1,68 @@
+
+
+[
+    {
+        "type": "base",
+        "buildings": [
+            {
+                "name": "Mainbase",
+                "type": "base",
+                "icon": "Images/barracks.png",
+                "range": 100000000,
+                "iconX": 30,
+                "iconY": 30
+            },
+            {
+                "name": "secondBase",
+                "type": "base",
+                "icon": "",
+                "range": 100000,
+                "iconX": 30,
+                "iconY": 30
+            }
+        ]
+    },
+    {
+        "type": "attack",
+        "buildings": [
+            {
+                "name": "Missilesilo",
+                "type": "attack",
+                "icon": "",
+                "range": null,
+                "iconX": 30,
+                "iconY": 30
+            },
+            {
+                "name": "Shortrange Missilesilo",
+                "type": "attack",
+                "icon": "",
+                "range": null,
+                "iconX": 30,
+                "iconY": 30
+            }
+        ]
+    },
+    {
+        "type": "defense",
+        "buildings": [
+            {
+                "name": "Airdefense",
+                "type": "defense",
+                "icon": "",
+                "range": null,
+                "iconX": 30,
+                "iconY": 30
+            },
+            {
+                "name": "Missiledefense",
+                "type": "defense",
+                "icon": "",
+                "range": null,
+                "iconX": 30,
+                "iconY": 30
+            }
+        ]
+    }
+    
+]
