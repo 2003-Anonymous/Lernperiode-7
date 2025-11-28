@@ -60,5 +60,12 @@ Heute habe ich die Basis, welche vorher schon am Anfang da war, entfernt. Jetzt 
 - [x] Ein weiteres Gebäude(Racketenabwehr) hinzufügen, welches eine Reichweite hat und auch Platziert werden kann.
 - [x] Diese Racketenabwehr soll Racketen abschiessen können, welche in Reichweite sind.
 
-Heute habe ich ein dunkles Overlay mit einem "Game over!" Button programmiert, welches angezeigt wird, wenn die Base im Explosionsradius liegt. Wenn man auf den Button clickt, wird die Seite neu geladen. Das ausgewählte Silo wird jetzt unten im Stats-Container unter der Karte angezeigt. Darunter befindet sich der Launch-Button. Dann habe ich noch eine Racketenabwehr programmiert, welche man auch platzieren kann. Die Reichweite wird durch einen blauen Kreis angezeigt. Wenn eine Rackete durch diesen Kreis fliegt, gibt es bei jedem Frame eine 2% Chance, dass die Rackete zerstört wird. Diese Wahrscheindlichkeit habe ich für jeden Frame gesetzt, damit es realistischer wirkt und die Rackete nicht einfach z.B. zu 50% beim betreten des blauen Kreises zerstört wird.
+Heute habe ich ein dunkles Overlay mit einem "Game over!" Button programmiert, welches angezeigt wird, wenn die Base im Explosionsradius liegt. Wenn man auf den Button clickt, wird die Seite neu geladen. Das ausgewählte Silo wird jetzt unten im Stats-Container unter der Karte angezeigt. Darunter befindet sich der Launch-Button. Dann habe ich noch eine Racketenabwehr programmiert, welche man auch platzieren kann. Die Reichweite wird durch einen blauen Kreis angezeigt. Wenn eine Rackete durch diesen Kreis fliegt, gibt es bei jedem Frame eine 2% Chance, dass die Rackete zerstört wird. Diese Wahrscheindlichkeit habe ich für jeden Frame gesetzt, damit es realistischer wirkt und die Rackete nicht einfach z.B. zu 50% beim betreten des blauen Kreises zerstört wird. Zum Schluss habe ich noch die Racketen- und Gebäude-Liste in ein JSON umgelagert. Deshalb kann es sein, dass nicht alles ganz richtig funktioniert, weil noch nicht alles im Code angepasst wurde.
 
+
+## 5.12.25
+
+- [ ] Untermenus für die Gebäude einfügen, damit man die verschiedenen Gebäudeartein einzeln anzeigen kann
+- [ ] Weitere Silos und Luftabwehr hinzufügen.
+- [ ] Die verschiedenen Luftabwehr haben verschiedene Reichweiten und Abschusswahrscheindlichkeiten.
+- [ ] Die unterschiedlichen Silos sollen unterschiedliche Racketen schiessen können, bassierend auf dem Typ der Rackete.
