@@ -63,9 +63,56 @@ Heute habe ich die Basis, welche vorher schon am Anfang da war, entfernt. Jetzt 
 Heute habe ich ein dunkles Overlay mit einem "Game over!" Button programmiert, welches angezeigt wird, wenn die Base im Explosionsradius liegt. Wenn man auf den Button clickt, wird die Seite neu geladen. Das ausgewählte Silo wird jetzt unten im Stats-Container unter der Karte angezeigt. Darunter befindet sich der Launch-Button. Dann habe ich noch eine Racketenabwehr programmiert, welche man auch platzieren kann. Die Reichweite wird durch einen blauen Kreis angezeigt. Wenn eine Rackete durch diesen Kreis fliegt, gibt es bei jedem Frame eine 2% Chance, dass die Rackete zerstört wird. Diese Wahrscheindlichkeit habe ich für jeden Frame gesetzt, damit es realistischer wirkt und die Rackete nicht einfach z.B. zu 50% beim betreten des blauen Kreises zerstört wird. Zum Schluss habe ich noch die Racketen- und Gebäude-Liste in ein JSON umgelagert. Deshalb kann es sein, dass nicht alles ganz richtig funktioniert, weil noch nicht alles im Code angepasst wurde.
 
 
-## 5.12.25
+## 12.12.25
 
-- [ ] Untermenus für die Gebäude einfügen, damit man die verschiedenen Gebäudeartein einzeln anzeigen kann
-- [ ] Weitere Silos und Luftabwehr hinzufügen.
-- [ ] Die verschiedenen Luftabwehr haben verschiedene Reichweiten und Abschusswahrscheindlichkeiten.
-- [ ] Die unterschiedlichen Silos sollen unterschiedliche Racketen schiessen können, bassierend auf dem Typ der Rackete.
+- [x] Untermenus für die Gebäude einfügen, damit man die verschiedenen Gebäudeartein einzeln anzeigen kann
+- [x] Weitere Silos und Luftabwehr hinzufügen.
+- [x] Die verschiedenen Luftabwehr haben verschiedene Reichweiten und Abschusswahrscheindlichkeiten.
+- [x] Die unterschiedlichen Silos sollen unterschiedliche Racketen schiessen können, bassierend auf dem Typ der Rackete.
+
+Heute habe ich die Untermenus Base, Attack und Defense eingefügt. Auf diese kann man klicken und dann werden die dazugehörigen Gebäude angezeigt. Dann habe ich noch hinzugefügt, dass das Missilesilo nur bestimmte Racketen schiessen kann(die mit grosser Reichweite) und das Shortrange Silo kann nur solche mit kurzer Reichweite schiessen. Danach habe ich noch eine zweite Luftabwehr hinzugefügt, welche eine höhere Abschusswahrscheindlichkeit hat, dafür  nicht eine so grosse Reichweite. Zudem habe ich noch programmiert, dass wenn eine Luftabwehr oder ein Silo im Explosionsradius liegt, dass diese dann zerstört werden. Als ich damit fertig war, habe ich noch eine Währung hinzugefügt, welche oberhalb der Karte angezeigt wird. Wenn man eine Rackete abschiesst, werden im Explosionsbereich alle Gebäude gezählt. Das funktioniert mithilfe von der Overpass-API. Pro zerstörtes Gebäude bekommt man 10 Geld. Es dauert aber bei grösseren Explosionen in Städten ein wenig, da es dort sehr viele Gebäude hat. Als ich die Zarbombe an Tokio getestet habe, habe ich 0 Gebäude nach langer Zeit bekommen. Ansonsten funktioniert es aber sehr gut. Zuerst habe ich es so gemacht, dass ich die Gebäude zurückbekomme und nicht nur die Anzahl. Das habe ich dann aber umgeändert, weil die Wartezeit sonst viel zu lang wäre und die Seite auch ein paar mal abgestürtzt ist.
+
+
+## 19.12.25
+
+- [ ] Kosten für das Bauen von Silos und Luftabwehr einfügen.
+- [ ] Kosten für das Abschiessen von Racketen einfügen.
+- [ ] Racketen müssen zuerst freigeschaltet werden. (mit Geld)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
