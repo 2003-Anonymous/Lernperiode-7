@@ -1,5 +1,3 @@
-
-
 [
     {
         "type": "base",
@@ -7,7 +5,7 @@
             {
                 "name": "Mainbase",
                 "type": "base",
-                "icon": "Images/barracks.png",
+                "icon": "Images/mainBase.png",
                 "range": 100000000,
                 "iconX": 30,
                 "iconY": 30
@@ -28,15 +26,15 @@
             {
                 "name": "Missilesilo",
                 "type": "attack",
-                "icon": "",
+                "icon": "Images/missileSilo.png",
                 "range": null,
                 "iconX": 30,
                 "iconY": 30
             },
             {
-                "name": "Shortrange Missilesilo",
+                "name": "Shortrange Silo",
                 "type": "attack",
-                "icon": "",
+                "icon": "Images/shortrangeSilo.png",
                 "range": null,
                 "iconX": 30,
                 "iconY": 30
@@ -49,18 +47,20 @@
             {
                 "name": "Airdefense",
                 "type": "defense",
-                "icon": "",
-                "range": null,
+                "icon": "Images/airDefense.png",
+                "range": 10000,
                 "iconX": 30,
-                "iconY": 30
+                "iconY": 30,
+                "hitOdds": 0.1
             },
             {
                 "name": "Missiledefense",
                 "type": "defense",
-                "icon": "",
-                "range": null,
+                "icon": "Images/missileDefense.png",
+                "range": 100000,
                 "iconX": 30,
-                "iconY": 30
+                "iconY": 30,
+                "hitOdds": 0.02
             }
         ]
     }

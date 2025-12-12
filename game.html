@@ -13,21 +13,26 @@
     <main>
         <div id="missile-Container">
             <div id="menu-Container">
-                <div id="menu_missile" class="menu_block">Missiles</div>
-                <div id="menu_building" class="menu_block">Buildings</div>
-                <div id="menu_silo" class="menu_block">Silos</div>
+                <div id="menu_missile" class="menu_block" tabindex="0">Missiles</div>
+                <div id="menu_building" class="menu_block" tabindex="0">Buildings</div>
+                <div id="menu_silo" class="menu_block" tabindex="0">Silos</div>
             </div>
             <div id="search-Container">
                 <input id="searchField" type="search" placeholder="Search...">
                 
             </div>
             <div id="missileList-Container">
-                <div id="type_menu">Type</div>
+                <div id="type_menu">
+                    <div class="type" id="type_base" data-type="base">Base</div>
+                    <div class="type" id="type_attack" data-type="attack">Attack</div>
+                    <div class="type" id="type_defense" data-type="defense">Defense</div>
+                </div>
                 <ul id="missileList"> 
                 </ul>
             </div>
         </div>
         <div id="right-Container">
+            <p id="money">Money: </p>
             <div id="map"></div>
             <div id="selectedMissile">
                 <div id="model">

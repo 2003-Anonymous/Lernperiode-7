@@ -23,7 +23,7 @@ fetch("Data/buildings.json")
     .then(response => response.json())
     .then(data => {
         buildings = data;
-        createList(buildings);
+        handleClick("base");
     })
     .catch(error => console.error(error));
 
@@ -57,18 +57,48 @@ const viewer = document.getElementById("modelViewer");
 const menu_missile = document.getElementById("menu_missile");
 const menu_building = document.getElementById("menu_building");
 const menu_silo = document.getElementById("menu_silo");
+const type_menu = document.getElementById("type_menu");
+const type_attack = document.getElementById("type_attack");
+const type_defense = document.getElementById("type_defense");
+const type_base = document.getElementById("type_base");
 const missileList = document.getElementById("missileList");
 const searchField = document.getElementById("searchField");
 const siloBox = document.getElementById("selectedSilo");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const gameOver = document.getElementById("gameOver");
+
 let previewRadius;
 let rangeCircle;
 let selectedElement;
 let previewCenter;
 let target;
 let menuSelected = "building";
+let selectedType = "base";
 let base;
+
+// function separateBuildings(){
+//     let separatedBuildings = [];
+//     buildings.forEach((b) => {
+//         if(b.)
+//     })
+// }
+
+function selectVisuals(element, bg){
+    element.style.backgroundColor = bg;
+    element.style.color = "var(--bg-color)";
+}
+
+function deselectVisuals(element, bg){
+    element.style.backgroundColor = bg;
+    element.style.color = "var(--text-color)";
+}
+
+selectVisuals(menu_building, "var(--highlight)");
+handleClick("base");
+
+
+
+
 
 function hideElement(element){
     element.style.visibility = 'hidden';
@@ -94,8 +124,6 @@ function createList(list){
             const damage = document.getElementById("damage_field");
             const radius = document.getElementById("radius_field");
 
-            const nameLabel = document.getElementById("name_label");
-            const typeLabel = document.getElementById("type_label");
             const rangeLabel = document.getElementById("range_label");
             const damageLabel = document.getElementById("damage_label");
             const radiusLabel = document.getElementById("radius_label");
@@ -146,6 +174,9 @@ function createList(list){
                 hideElement(range);
                 hideElement(damage);
                 hideElement(radius);
+                hideElement(rangeLabel);
+                hideElement(damageLabel);
+                hideElement(radiusLabel);
             }
 
             if(element.src) viewer.src = element.src;
@@ -225,7 +256,8 @@ function createCircles(position){
         }).addTo(map);
         target = {
             radius: radius,
-            center: null
+            center: null,
+            missile: selectedMissile
         }
         targets.push(target);
     }
@@ -261,36 +293,71 @@ map.on('click', function(e) {
     if(selectedBuilding){
         let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
 
-        if(selectedBuilding.name === "Base"){
+        if(selectedBuilding.name === "Mainbase"){
             if(base) map.removeLayer(base);
             base = L.marker(e.latlng, {icon: icon}).addTo(map);
+
         } else if(selectedBuilding.name === "Missilesilo"){
-            let siloMarker = L.marker(e.latlng, {icon: icon}).addTo(map);
+            let siloMarker = L.marker(e.latlng, {icon: icon}).addTo(map)
+            .bindPopup(selectedBuilding.name + " " + (silos.length + 1));
             let silo = {
                 name: selectedBuilding.name + " " + (silos.length + 1),
                 marker: siloMarker,
-                type: "attack"
+                type: "longrange"
             }
             silos.push(silo);
-        } else if(selectedBuilding.name === "Airdefense"){
-            let airdefenseMarker = L.marker(e.latlng, {icon: icon}).addTo(map);
+        } else if(selectedBuilding.name === "Shortrange Silo"){
+            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
+            .bindPopup(selectedBuilding.name + " " + (silos.length + 1));
+
+            let silo = {
+                name: selectedBuilding.name + " " + (silos.length + 1),
+                marker:marker,
+                type: "shortrange"
+            }
+            silos.push(silo);
+        
+        } else if(selectedBuilding.name === "Missiledefense"){
+            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
+            .bindPopup(selectedBuilding.name + " " + (airdefenses.length + 1));
             
-            let airdefense = {
-                name: selectedBuilding.name + " " + (airdefenses.length + 1),
-                marker: airdefenseMarker,
-                range: 100000,
+            let missiledefense = {
+                ...selectedBuilding,
+                marker: marker,
                 rangeCircle: null
             }
-            airdefenses.push(airdefense);
 
-            let airdefenseRange = L.circle(e.latlng, {
+            let range = L.circle(e.latlng, {
                 color: 'blue',
                 fillColor: '#0f28e5ff',
+                fillOpacity: 0.3,
+                radius: missiledefense.range
+            }).addTo(map);
+
+            missiledefense.rangeCircle = range;
+            missiledefense.name = selectedBuilding.name + " " + (airdefenses.length + 1);
+            airdefenses.push(missiledefense);
+
+        } else if(selectedBuilding.name === "Airdefense"){
+            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
+            .bindPopup(selectedBuilding.name + " " + (airdefenses.length + 1));
+
+            let airdefense = {
+                ...selectedBuilding,
+                marker: marker,
+                rangeCircle: null
+            }
+
+            let range = L.circle(e.latlng, {
+                color: 'yellow',
+                fillColor: 'yellow',
                 fillOpacity: 0.3,
                 radius: airdefense.range
             }).addTo(map);
 
-            airdefense.rangeCircle = airdefenseRange;
+            airdefense.name = selectedBuilding.name + " " + (airdefenses.length + 1);
+            airdefense.rangeCircle = range;
+            airdefenses.push(airdefense);
         }
         
     }
@@ -344,16 +411,18 @@ function launchMissile(start, target, durationSec = 3){
         const lng = lerp(startLatLng.lng, targetLatLng.lng, t);
         missile.setLatLng([lat, lng]);
 
-        airdefenses.forEach((a) =>{
+        for (let a of airdefenses)
+        {
             let distanceToA = map.distance(a.marker.getLatLng(), missile.getLatLng());
 
             if(distanceToA < a.range){
-                if(Math.random() < 0.02){
+                if(Math.random() < a.hitOdds) {
                     missile.remove();
                     missileDestroyed = true;
+                    return;
                 }
             }
-        })
+        }
 
         if(t < 1){
             requestAnimationFrame(step);
@@ -368,11 +437,49 @@ function launchMissile(start, target, durationSec = 3){
 
 
                 let distanceToBase = map.distance(base.getLatLng(), target.center.getLatLng());
-
-                if(distanceToBase <= selectedMissile.radius){
+                
+                if(distanceToBase <= target.missile.radius){
                     gameOver.style.display = "flex";
                     gameOverOverlay.style.display = "flex";
                 }
+
+                airdefenses = airdefenses.filter(a => {
+                    let distanceToA = map.distance(a.marker.getLatLng(), target.center.getLatLng());
+                    
+                    if(distanceToA <= target.missile.radius){
+                        map.removeLayer(a.marker);
+                        map.removeLayer(a.rangeCircle);
+                        return false;
+                    }
+                    return true;
+                });
+
+                silos = silos.filter(s => {
+                    let distanceToS = map.distance(s.marker.getLatLng(), target.center.getLatLng());
+
+                    if(distanceToS <= target.missile.radius){
+                        map.removeLayer(s.marker);
+                        selectedSilo = null;
+                        return false;
+                    }
+                    return true;
+                })
+
+                getBuildings(target.center.getLatLng(), target.missile.radius)
+                    .then(hitCount => {
+                        alert("Zerstörte Gebäude: " + hitCount);
+
+                        let money = hitCount * 10;
+
+                        const moneyText = document.getElementById("money");
+
+                        let currentMoney = parseInt(moneyText.textContent.replace(/\D/g, ''), 10) || 0;
+                        let actualMoney = currentMoney + money;
+                        moneyText.textContent = `Money: ${actualMoney}`;
+
+                        
+                    });
+            
             }
         }
     }
@@ -396,18 +503,43 @@ launchBtn.addEventListener('click', () =>{
 
 
 menu_missile.addEventListener('click', () => {
-    createList(missiles);
+
     menuSelected = "missile";
+    type_menu.style.display = 'none';
+
+    if(selectedSilo){
+        if(selectedSilo.type === "shortrange"){
+            const shortrangeMissiles = missiles.find(entry => entry.type === "shortrange").missiles;
+            createList(shortrangeMissiles);
+        } else {
+            const icbms = missiles.find(entry => entry.type === "longrange").missiles;
+            createList(icbms);
+        }
+        
+    }
+   
+    selectVisuals(menu_missile, "var(--highlight)");
+    deselectVisuals(menu_building, "var(--accent-green)");
+    deselectVisuals(menu_silo, "var(--accent-green)");
 })
 
 menu_building.addEventListener('click', () => {
     createList(buildings);
     menuSelected = "building";
+    type_menu.style.display = 'flex';
+    handleClick("base");
+    deselectVisuals(menu_missile, "var(--accent-green)");
+    selectVisuals(menu_building, "var(--highlight)");
+    deselectVisuals(menu_silo, "var(--accent-green)");
 })
 
 menu_silo.addEventListener('click', () => {
     createList(silos);
     menuSelected = "silo";
+    type_menu.style.display = 'none';
+    deselectVisuals(menu_missile, "var(--accent-green)");
+    deselectVisuals(menu_building, "var(--accent-green)");
+    selectVisuals(menu_silo, "var(--highlight)");
 })
 
 gameOver.addEventListener('click', () =>{
@@ -436,6 +568,120 @@ searchField.addEventListener('input', () =>{
         createList(newList);
     }
 })
+
+document.querySelectorAll(".type").forEach(btn => {
+    btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+
+        handleClick(type);
+    });
+});
+
+function handleClick(type){
+    if(type === "base"){
+        const bases = buildings
+            .flatMap(category => category.buildings)
+            .filter(building => building.type === "base");
+        menuSelected = "building";
+        createList(bases);
+
+        selectVisuals(type_base, "var(--highlight)");
+        deselectVisuals(type_attack, "var(--bg-color)");
+        deselectVisuals(type_defense, "var(--bg-color)");
+
+    } else if(type === "attack"){
+        const attack = buildings
+                .flatMap(category => category.buildings)
+                .filter(building => building.type === "attack");
+            menuSelected = "building";
+            createList(attack);
+
+            deselectVisuals(type_base, "var(--bg-color)");
+            selectVisuals(type_attack, "var(--highlight)");
+            deselectVisuals(type_defense, "var(--bg-color)");
+
+    } else if(type === "defense"){
+            const defenses = buildings
+                .flatMap(category => category.buildings)
+                .filter(building => building.type === "defense");
+            menuSelected = "building";
+            createList(defenses);
+
+            deselectVisuals(type_base, "var(--bg-color)");
+            deselectVisuals(type_attack, "var(--bg-color)");
+            selectVisuals(type_defense, "var(--highlight)");
+
+    }
+
+}
+
+
+
+
+function getBuildings(latlng, radius) {
+    const overpassUrl = "https://overpass-api.de/api/interpreter";
+    const query = `
+        [out:json];
+        (
+            way["building"](around:${radius},${latlng.lat},${latlng.lng});
+            relation["building"](around:${radius},${latlng.lat},${latlng.lng});
+        );
+        out count;
+        `;
+
+        return fetch(overpassUrl, {
+            method: "POST",
+            body: query
+        })
+        .then(res => res.json())
+        .then(data => {
+           const count = data.elements[0]?.tags?.total || 0;
+           return count;
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //<a href="https://www.flaticon.com/free-icons/missile" title="missile icons">Missile icons created by Nhor Phai - Flaticon</a>
