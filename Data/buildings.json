@@ -6,17 +6,19 @@
                 "name": "Mainbase",
                 "type": "base",
                 "icon": "Images/mainBase.png",
+                "income": 100,
                 "range": 100000000,
                 "iconX": 30,
                 "iconY": 30
             },
             {
-                "name": "secondBase",
+                "name": "Factory",
                 "type": "base",
-                "icon": "",
+                "icon": "Images/factory.png",
                 "range": 100000,
-                "iconX": 30,
-                "iconY": 30
+                "income": 200,
+                "iconX": 50,
+                "iconY": 50
             }
         ]
     },
@@ -25,17 +27,19 @@
         "buildings": [
             {
                 "name": "Missilesilo",
-                "type": "attack",
+                "type": "longrange",
                 "icon": "Images/missileSilo.png",
                 "range": null,
+                "rangeCircle": null,
                 "iconX": 30,
                 "iconY": 30
             },
             {
                 "name": "Shortrange Silo",
-                "type": "attack",
+                "type": "shortrange",
                 "icon": "Images/shortrangeSilo.png",
                 "range": null,
+                "rangeCircle": null,
                 "iconX": 30,
                 "iconY": 30
             }

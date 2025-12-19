@@ -1,3 +1,5 @@
+window.currentMoney = 0;
+localStorage.setItem("currentMoney", window.currentMoney);
 var map = L.map('map').setView([47.3769, 8.5417], 13);
 
         
@@ -76,6 +78,7 @@ let menuSelected = "building";
 let selectedType = "base";
 let base;
 
+
 // function separateBuildings(){
 //     let separatedBuildings = [];
 //     buildings.forEach((b) => {
@@ -95,9 +98,6 @@ function deselectVisuals(element, bg){
 
 selectVisuals(menu_building, "var(--highlight)");
 handleClick("base");
-
-
-
 
 
 function hideElement(element){
@@ -297,71 +297,68 @@ map.on('click', function(e) {
             if(base) map.removeLayer(base);
             base = L.marker(e.latlng, {icon: icon}).addTo(map);
 
-        } else if(selectedBuilding.name === "Missilesilo"){
-            let siloMarker = L.marker(e.latlng, {icon: icon}).addTo(map)
-            .bindPopup(selectedBuilding.name + " " + (silos.length + 1));
-            let silo = {
-                name: selectedBuilding.name + " " + (silos.length + 1),
-                marker: siloMarker,
-                type: "longrange"
-            }
-            silos.push(silo);
-        } else if(selectedBuilding.name === "Shortrange Silo"){
-            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
-            .bindPopup(selectedBuilding.name + " " + (silos.length + 1));
+        } else if(selectedBuilding.name === "Factory"){
+            let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
+            let factory = L.marker(e.latlng, {icon: icon}).addTo(map);
+            
 
-            let silo = {
-                name: selectedBuilding.name + " " + (silos.length + 1),
-                marker:marker,
-                type: "shortrange"
-            }
-            silos.push(silo);
+        } else if(selectedBuilding.name === "Missilesilo"){
+            
+            createSilo(e.latlng);
+
+        } else if(selectedBuilding.name === "Shortrange Silo"){
+            
+            createSilo(e.latlng);
         
         } else if(selectedBuilding.name === "Missiledefense"){
-            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
-            .bindPopup(selectedBuilding.name + " " + (airdefenses.length + 1));
-            
-            let missiledefense = {
-                ...selectedBuilding,
-                marker: marker,
-                rangeCircle: null
-            }
 
-            let range = L.circle(e.latlng, {
-                color: 'blue',
-                fillColor: '#0f28e5ff',
-                fillOpacity: 0.3,
-                radius: missiledefense.range
-            }).addTo(map);
+            createDefense("blue", e.latlng);
 
-            missiledefense.rangeCircle = range;
-            missiledefense.name = selectedBuilding.name + " " + (airdefenses.length + 1);
-            airdefenses.push(missiledefense);
+        } else if(selectedBuilding.name === "Airdefense"){    
 
-        } else if(selectedBuilding.name === "Airdefense"){
-            let marker = L.marker(e.latlng, {icon: icon}).addTo(map)
-            .bindPopup(selectedBuilding.name + " " + (airdefenses.length + 1));
+           createDefense("yellow", e.latlng);
 
-            let airdefense = {
-                ...selectedBuilding,
-                marker: marker,
-                rangeCircle: null
-            }
-
-            let range = L.circle(e.latlng, {
-                color: 'yellow',
-                fillColor: 'yellow',
-                fillOpacity: 0.3,
-                radius: airdefense.range
-            }).addTo(map);
-
-            airdefense.name = selectedBuilding.name + " " + (airdefenses.length + 1);
-            airdefense.rangeCircle = range;
-            airdefenses.push(airdefense);
         }
         
     }
 });
+
+function createDefense(color, latlng) {
+    let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
+
+    let marker = L.marker(latlng, {icon: icon}).addTo(map)
+        .bindPopup(selectedBuilding.name + " " + (airdefenses.length + 1));
+
+    let object = {
+        ...selectedBuilding,
+        marker: marker,
+    }
+
+    let range = L.circle(latlng, {
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.3,
+        radius: object.range
+    }).addTo(map);
+
+    object.name = selectedBuilding.name + " " + (airdefenses.length + 1);
+    object.rangeCircle = range;
+    airdefenses.push(object);
+}
+
+function createSilo(latlng) {
+    let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
+    let marker = L.marker(latlng, {icon: icon}).addTo(map)
+        .bindPopup(selectedBuilding.name + " " + (silos.length + 1));
+
+    let silo = {
+        ...selectedBuilding,
+        marker: marker,
+    }
+    silo.name = selectedBuilding.name + " " + (silos.length + 1),
+    silos.push(silo);
+}
+
 
 map.on('mousemove', (e) => {
     if(previewRadius){
@@ -469,13 +466,9 @@ function launchMissile(start, target, durationSec = 3){
                     .then(hitCount => {
                         alert("Zerstörte Gebäude: " + hitCount);
 
-                        let money = hitCount * 10;
+                        let money = hitCount * (target.missile.warhead / 1000);
 
-                        const moneyText = document.getElementById("money");
-
-                        let currentMoney = parseInt(moneyText.textContent.replace(/\D/g, ''), 10) || 0;
-                        let actualMoney = currentMoney + money;
-                        moneyText.textContent = `Money: ${actualMoney}`;
+                        generateIncome(money);
 
                         
                     });
@@ -580,8 +573,8 @@ document.querySelectorAll(".type").forEach(btn => {
 function handleClick(type){
     if(type === "base"){
         const bases = buildings
-            .flatMap(category => category.buildings)
-            .filter(building => building.type === "base");
+            .filter(item => item.type === "base")
+            .flatMap(item => item.buildings);
         menuSelected = "building";
         createList(bases);
 
@@ -591,8 +584,8 @@ function handleClick(type){
 
     } else if(type === "attack"){
         const attack = buildings
-                .flatMap(category => category.buildings)
-                .filter(building => building.type === "attack");
+                .filter(item => item.type === "attack")
+                .flatMap(item => item.buildings);
             menuSelected = "building";
             createList(attack);
 
@@ -602,8 +595,8 @@ function handleClick(type){
 
     } else if(type === "defense"){
             const defenses = buildings
-                .flatMap(category => category.buildings)
-                .filter(building => building.type === "defense");
+                .filter(item => item.type === "defense")
+                .flatMap(item => item.buildings);
             menuSelected = "building";
             createList(defenses);
 
@@ -641,7 +634,17 @@ function getBuildings(latlng, radius) {
 }
 
 
+function generateIncome(income) {
+    const moneyText = document.getElementById("money");
 
+    window.currentMoney = parseFloat(localStorage.getItem("currentMoney"));
+
+    let actualMoney = Number((window.currentMoney + income).toFixed(2));
+    moneyText.textContent = `Money: ${actualMoney}`;
+
+    window.currentMoney += income;
+    localStorage.setItem("currentMoney", window.currentMoney);
+}
 
 
 

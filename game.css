@@ -53,9 +53,7 @@ main{
 }
 
 #money{
-    text-align: center;
     color: var(--text-color);
-    margin: 5px;
 }
 
 #selectedMissile{
@@ -297,4 +295,26 @@ main{
 #gameOver:hover{
     transform: scale(1.05);
     cursor: pointer;
+}
+
+#top{
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#treeBtn{
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: var(--accent-green);
+    border: 2px solid var(--highlight);
+    color: var(--text-color);
+    transition: 0.3s;
+}
+
+#treeBtn:hover{
+    background-color: var(--highlight);
+    color: var(--bg-color);
+    border-color: var(--bg-color);
 }
