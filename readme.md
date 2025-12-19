@@ -75,14 +75,11 @@ Heute habe ich die Untermenus Base, Attack und Defense eingefügt. Auf diese kan
 
 ## 19.12.25
 
-- [ ] Kosten für das Bauen von Silos und Luftabwehr einfügen.
-- [ ] Kosten für das Abschiessen von Racketen einfügen.
-- [ ] Racketen müssen zuerst freigeschaltet werden. (mit Geld)
+- [x] Einen "Skiltree" erstellen
+- [x] Stufen im Skilltree können mit Geld gekauft werden
+- [x] Racketen müssen so zuerst über den Skilltree freigeschaltet werden.
 
-
-
-
-
+Heute habe ich für beide Siloarten eine Art Skilltree als neues html hinzugefügt. Dort gibt es verschiedene Stufen, welche man der Reihe nach mit Geld kaufen muss. Je nach Stufe werden neue Racketen Freigeschaltet. Das funktioniert aber noch nicht. Diesen Skilltree zu erstellen hat unerwartet lange gedauert, bis ich es hinbekommen habe, dass das locked-overlay ausgeblendet wird. Dafür habe ich gelernt, dass man mit der classList z.B. hinten an eine  Klasse active dranhängen kann und so ihr aussehen mithilfe von css verändern kann. Das ist sehr praktisch und hätte mir bei anderen Projekten sehr geholfen. Mit dieser Technik werde ich auch den Skilltree noch in mein anderes html einfügen, weil so wie es jetzt ist, werden alle Marker zurückgesetzt, wenn man wieder zurück geht. Das aktuelle Geld wird im LocalStorage gespeichert und im js vom Skilltree dann abgerufen und nach dem Kauf wieder hochgeladen. Wenn ich dann beide html-Seiten kombiniert habe, kann ich das vielleicht auf eine andere Art machen, aber das war gerade die einfachste, die ich gefunden habe. Zuerst habe ich es noch mit window. probiert, weil ich das zuerst gefunden habe. Das hat aber nicht funktioniert.
 
 
 
