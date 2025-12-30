@@ -176,6 +176,12 @@ main{
     border-bottom: 1px solid var(--highlight);
 }
 
+.locked{
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
+
 #missileList li:hover{
     background-color: var(--highlight);
     color: black;
@@ -308,7 +314,7 @@ main{
     margin-left: 10px;
     margin-right: 10px;
     background-color: var(--accent-green);
-    border: 2px solid var(--highlight);
+    border: 1px solid var(--highlight);
     color: var(--text-color);
     transition: 0.3s;
 }
@@ -317,4 +323,29 @@ main{
     background-color: var(--highlight);
     color: var(--bg-color);
     border-color: var(--bg-color);
+}
+
+#skillTree{
+    background-color: var(--bg-color);
+    display: none;
+    position: fixed;
+    margin: 0;
+    padding: 20px;
+    z-index: 100000;
+    height: 100%;
+    width: 100%;
+}
+
+#logoutBtn{
+    background-color: var(--accent-green);
+    color: var(--text-color);
+    border: 1px solid var(--highlight);
+    margin-left: 600px;
+    margin-right: 10px;
+}
+
+#sidebarBtn{
+    background-color: var(--accent-green);
+    color: var(--text-color);
+    border: 1px solid var(--highlight);
 }

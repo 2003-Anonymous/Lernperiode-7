@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
     <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="tree.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -27,14 +28,16 @@
                     <div class="type" id="type_attack" data-type="attack">Attack</div>
                     <div class="type" id="type_defense" data-type="defense">Defense</div>
                 </div>
-                <ul id="missileList"> 
+                <ul id="missileList">
                 </ul>
             </div>
         </div>
         <div id="right-Container">
             <div id="top">
-                <button id="treeBtn" onclick="window.location.href='tree.html'">Tree</button>
+                <button id="treeBtn" type="button">Tree</button>
                 <p id="money">Money: </p>
+                <button id="logoutBtn">Logout</button>
+                <button id="sidebarBtn">III</button>
             </div>
             
             <div id="map"></div>
@@ -82,8 +85,20 @@
     <div id="gameOverOverlay">
         <div id="gameOver">Game over!</div>
     </div>
-    
+
+    <div id="skillTree">
+        <button id="backBtn">Back</button>
+        <div class="tabs">
+            <button class="tab" onclick="showTree('longrange')">Longrange Silo</button>
+            <button class="tab active" onclick="showTree('shortrange')">Shortrange Silo</button>
+        </div>
+
+        <div id="longrange" class="tree"></div>
+        <div id="shortrange" class="tree active"></div>
+    </div>
+
     <script src="game.js"></script>
+    <script src="tree.js"></script>
 </body>
 </html>
 

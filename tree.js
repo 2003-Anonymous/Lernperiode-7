@@ -1,20 +1,15 @@
-window.currentMoney = parseFloat(localStorage.getItem("currentMoney"));
+
+const backBtn = document.getElementById("backBtn");
 
 const trees = {
     longrange: {
         name: "Longrange",
-        levels: 15
+        levels: 14
     },
     shortrange: {
         name: "Shortrange",
-        levels: 15
+        levels: 4
     }
-};
-
-
-let unlocked = {
-    longrange: 1,
-    shortrange: 1
 };
 
 
@@ -27,7 +22,7 @@ function buildTrees() {
             const box = document.createElement("div");
             box.className = "box";
 
-            const price = i * 1000;
+            const price = Math.pow(i * (1 + i), 3);
 
             if (i > unlocked[tree]) {
                 box.classList.add("locked");
@@ -38,7 +33,7 @@ function buildTrees() {
 
                  box.addEventListener("click", () => {
                     unlockLevel(tree, i, price);
-                 })
+                 });
                 
             } else {
                 box.innerHTML = `
@@ -54,13 +49,28 @@ function buildTrees() {
 }
 
 function unlockLevel(tree, level, price){
-    alert(window.currentMoney);
-    if  (window.currentMoney >= price){
+    if  (currentMoney >= price){
         if (unlocked[tree] + 1 === level){
             unlocked[tree] = level;
-            window.currentMoney -= price;
-            localStorage.setItem("currentMoney", window.currentMoney);
-            
+            currentMoney -= price;
+            updateMoney();
+
+            missiles[tree].forEach(missile =>{
+                if(missile.stage === level){
+                    missile.unlocked = true;
+                }
+            })
+
+            Object.values(buildings).forEach(category => {
+                category.forEach(building => {
+                    if(building.stage === level){
+                        building.unlocked = true;
+                    }
+                });
+            });
+
+            handleClick(selectedType);
+
             buildTrees();
         }
     } else {
@@ -79,5 +89,9 @@ function showTree(name) {
     document.getElementById(name).classList.add("active");
     event.target.classList.add("active");
 }
+
+backBtn.addEventListener("click", () => {
+    skillTree.style.display = "none";
+})
 
 buildTrees();

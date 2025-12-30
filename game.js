@@ -1,5 +1,5 @@
-window.currentMoney = 0;
-localStorage.setItem("currentMoney", window.currentMoney);
+let currentMoney = 100000000;
+updateMoney();
 var map = L.map('map').setView([47.3769, 8.5417], 13);
 
         
@@ -13,18 +13,26 @@ var map = L.map('map').setView([47.3769, 8.5417], 13);
         //     .openPopup();
 
 let missiles = [];
-fetch("Data/missiles.json")
+fetch("https://localhost:7224/api/Missile")
     .then(response => response.json())
     .then(data =>{
         missiles = data;
+
+        unlockElements(missiles.shortrange, "missile");
+        unlockElements(missiles.longrange, "missile");
     })
     .catch(error => console.error(error));
 
 let buildings = [];
-fetch("Data/buildings.json")
+fetch("https://localhost:7224/api/Building")
     .then(response => response.json())
     .then(data => {
         buildings = data;
+
+        Object.values(buildings).forEach(category => {
+            unlockElements(category, "building");
+        })
+        
         handleClick("base");
     })
     .catch(error => console.error(error));
@@ -68,6 +76,9 @@ const searchField = document.getElementById("searchField");
 const siloBox = document.getElementById("selectedSilo");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const gameOver = document.getElementById("gameOver");
+const treeBtn = document.getElementById("treeBtn");
+const skillTree = document.getElementById("skillTree");
+const logoutBtn = document.getElementById("logoutBtn");
 
 let previewRadius;
 let rangeCircle;
@@ -78,13 +89,10 @@ let menuSelected = "building";
 let selectedType = "base";
 let base;
 
-
-// function separateBuildings(){
-//     let separatedBuildings = [];
-//     buildings.forEach((b) => {
-//         if(b.)
-//     })
-// }
+let unlocked = {
+    longrange: 1,
+    shortrange: 1
+};
 
 function selectVisuals(element, bg){
     element.style.backgroundColor = bg;
@@ -97,7 +105,26 @@ function deselectVisuals(element, bg){
 }
 
 selectVisuals(menu_building, "var(--highlight)");
-handleClick("base");
+
+function unlockElements(list, t){
+    if(t === "missile"){
+        list.forEach(missile => {
+            if(missile.stage <= unlocked[missile.type]){
+                missile.unlocked = true;
+            }
+        });
+    }
+
+    if(t === "building"){
+        const totalUnlockedStages = unlocked.shortrange + unlocked.longrange;
+
+        list.forEach(building => {
+            if(building.stage <= totalUnlockedStages){
+                building.unlocked = true;
+            }
+        });
+    }
+}
 
 
 function hideElement(element){
@@ -114,9 +141,14 @@ function createList(list){
     list.forEach ((element) => {
 
         const newLi = document.createElement("li");
-        newLi.textContent = element.name;
 
-        newLi.addEventListener('click', () =>{
+        if(!element.unlocked){
+            newLi.classList.add("locked");
+            newLi.textContent = "🔒 Locked"
+        } else {
+            newLi.textContent = element.name;
+
+            newLi.addEventListener('click', () =>{
 
             const name = document.getElementById("name_field");
             const type = document.getElementById("type_field");
@@ -182,6 +214,8 @@ function createList(list){
             if(element.src) viewer.src = element.src;
 
         });
+        }
+
         missileList.appendChild(newLi);
     });  
 }
@@ -209,7 +243,6 @@ function createPreviewCircles(){
         radius: 2,
     }).addTo(map);
 
-    
     if(rangeCircle){
         map.removeLayer(rangeCircle);
         
@@ -466,8 +499,8 @@ function launchMissile(start, target, durationSec = 3){
                     .then(hitCount => {
                         alert("Zerstörte Gebäude: " + hitCount);
 
-                        let money = hitCount * (target.missile.warhead / 1000);
-
+                        let money = hitCount * target.missile.warhead / 1000;
+                        Math.round(money);
                         generateIncome(money);
 
                         
@@ -502,10 +535,10 @@ menu_missile.addEventListener('click', () => {
 
     if(selectedSilo){
         if(selectedSilo.type === "shortrange"){
-            const shortrangeMissiles = missiles.find(entry => entry.type === "shortrange").missiles;
+            const shortrangeMissiles = missiles.shortrange;
             createList(shortrangeMissiles);
         } else {
-            const icbms = missiles.find(entry => entry.type === "longrange").missiles;
+            const icbms = missiles.longrange;
             createList(icbms);
         }
         
@@ -517,7 +550,6 @@ menu_missile.addEventListener('click', () => {
 })
 
 menu_building.addEventListener('click', () => {
-    createList(buildings);
     menuSelected = "building";
     type_menu.style.display = 'flex';
     handleClick("base");
@@ -552,7 +584,7 @@ searchField.addEventListener('input', () =>{
         })
         createList(newList);
     }else if(menuSelected === "building"){
-        buildings.forEach((element) =>{
+        [...buildings.base, ...buildings.attack, ...buildings.defense].forEach((element) =>{
             let name = element.name.toLowerCase();
             if(name.includes(input)){
                 newList.push(element);
@@ -571,41 +603,24 @@ document.querySelectorAll(".type").forEach(btn => {
 });
 
 function handleClick(type){
-    if(type === "base"){
-        const bases = buildings
-            .filter(item => item.type === "base")
-            .flatMap(item => item.buildings);
-        menuSelected = "building";
-        createList(bases);
 
+    menuSelected = "building";
+    const b = buildings[type];
+    createList(b);
+
+    deselectVisuals(type_base, "var(--bg-color)");
+    deselectVisuals(type_attack, "var(--bg-color)");
+    deselectVisuals(type_defense, "var(--bg-color)");
+
+    if (type === "base") {
         selectVisuals(type_base, "var(--highlight)");
-        deselectVisuals(type_attack, "var(--bg-color)");
-        deselectVisuals(type_defense, "var(--bg-color)");
-
-    } else if(type === "attack"){
-        const attack = buildings
-                .filter(item => item.type === "attack")
-                .flatMap(item => item.buildings);
-            menuSelected = "building";
-            createList(attack);
-
-            deselectVisuals(type_base, "var(--bg-color)");
-            selectVisuals(type_attack, "var(--highlight)");
-            deselectVisuals(type_defense, "var(--bg-color)");
-
-    } else if(type === "defense"){
-            const defenses = buildings
-                .filter(item => item.type === "defense")
-                .flatMap(item => item.buildings);
-            menuSelected = "building";
-            createList(defenses);
-
-            deselectVisuals(type_base, "var(--bg-color)");
-            deselectVisuals(type_attack, "var(--bg-color)");
-            selectVisuals(type_defense, "var(--highlight)");
-
+    } 
+    else if (type === "attack") {
+        selectVisuals(type_attack, "var(--highlight)");
+    } 
+    else if (type === "defense") {
+        selectVisuals(type_defense, "var(--highlight)");
     }
-
 }
 
 
@@ -614,7 +629,7 @@ function handleClick(type){
 function getBuildings(latlng, radius) {
     const overpassUrl = "https://overpass-api.de/api/interpreter";
     const query = `
-        [out:json];
+        [out:json][timeout:5];
         (
             way["building"](around:${radius},${latlng.lat},${latlng.lng});
             relation["building"](around:${radius},${latlng.lat},${latlng.lng});
@@ -635,19 +650,26 @@ function getBuildings(latlng, radius) {
 
 
 function generateIncome(income) {
-    const moneyText = document.getElementById("money");
-
-    window.currentMoney = parseFloat(localStorage.getItem("currentMoney"));
-
-    let actualMoney = Number((window.currentMoney + income).toFixed(2));
-    moneyText.textContent = `Money: ${actualMoney}`;
-
-    window.currentMoney += income;
-    localStorage.setItem("currentMoney", window.currentMoney);
+    currentMoney += income;
+    currentMoney = Math.round(currentMoney);
+    
+    updateMoney();
 }
 
+function updateMoney(){
+    const money = document.getElementById("money");
+    money.textContent = `Money: ${currentMoney}`;
+}
+
+treeBtn.addEventListener("click", () => {
+    skillTree.style.display = "block";
+    buildTrees();
+})
 
 
+logoutBtn.addEventListener("click", () => {
+    location.href = "login.html";
+})
 
 
 
