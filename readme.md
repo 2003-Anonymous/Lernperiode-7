@@ -82,6 +82,19 @@ Heute habe ich die Untermenus Base, Attack und Defense eingefügt. Auf diese kan
 Heute habe ich für beide Siloarten eine Art Skilltree als neues html hinzugefügt. Dort gibt es verschiedene Stufen, welche man der Reihe nach mit Geld kaufen muss. Je nach Stufe werden neue Racketen Freigeschaltet. Das funktioniert aber noch nicht. Diesen Skilltree zu erstellen hat unerwartet lange gedauert, bis ich es hinbekommen habe, dass das locked-overlay ausgeblendet wird. Dafür habe ich gelernt, dass man mit der classList z.B. hinten an eine  Klasse active dranhängen kann und so ihr aussehen mithilfe von css verändern kann. Das ist sehr praktisch und hätte mir bei anderen Projekten sehr geholfen. Mit dieser Technik werde ich auch den Skilltree noch in mein anderes html einfügen, weil so wie es jetzt ist, werden alle Marker zurückgesetzt, wenn man wieder zurück geht. Das aktuelle Geld wird im LocalStorage gespeichert und im js vom Skilltree dann abgerufen und nach dem Kauf wieder hochgeladen. Wenn ich dann beide html-Seiten kombiniert habe, kann ich das vielleicht auf eine andere Art machen, aber das war gerade die einfachste, die ich gefunden habe. Zuerst habe ich es noch mit window. probiert, weil ich das zuerst gefunden habe. Das hat aber nicht funktioniert.
 
 
+## Ferien
+In den Ferien ist einiges geschehen. Ich habe die beiden Skilltrees fertig gestellt. Jede Stufe schaltet eine neue Rackete frei und manchmal auch ein Gebäude. Wann etwas freigeschaltet wird, entscheidet die Stage des Objektes. Zudem habe ich die Skilltrees jetzt in ein anderes HTML File eingefügt und sie werden dynamisch geladen, damit nicht alle Marker verschwinden, wenn man die Seite neu lädt. Ich habe es so gemacht, dass die Anzahl an freigeschalteten Dingen in einer einzigen Zahl gespeichert wird. Das erleichtert das speichern eines Spielstandes enorm. Da wir jetzt gerade das Backend in der Schule anschauen, habe ich auch ein eigenes Backend für den MissileSimulator geschrieben. Dort werden alle Racketen, Gebäude, User und später auch die Spielstände gespeichert. Um die Änderungen dauerhaft zu machen, habe ich das Backend mit einer SQLight-Datenbank verbunden. Das Backend zu programmieren war gar nicht so schwer, da wir einen guten Kurs von der Schule zur Verfügung gestellt bekommen haben. Das schwierigste war, die Daten bei der Get-Methode im richtigen Format zurückzugeben, also im selben Format, wie davor mein JSON war, damit ich nicht alles abändern muss. Das habe ich dann mit einer Sortierung nach Typ gelöst. Bis jetzt hat es immer funktioniert. Damit später der Spielstand gespeichert werden kann, braucht es noch ein Login. Genau das habe ich auch noch programmiert und mit meiner API verbunden. Ich habe im Game noch oben rechts einen Menubutton hinzugefügt, welcher nur angezeigt wird, wenn man als Admin angemeldet ist. Dort ist für später die Verwaltung der Konten(auch das Ansehen von Passwörtern und vom Spielstand) geplant. Ich hatte auch noch die Idee, hinzuzufügen, dass man dort im Menu die Stats der Racketen und die Stage, also wann etwas freigeschaltet wird, anpassen kann.
+
+## 09.01.2026
+Heute habe ich meine API noch weiter ausgebaut. Ich habe begonnen, die SaveGame-Logik zu programmieren. Im moment wird aber noch nichts gespeichert, ich habe einfach die Klasse SaveGame und den SaveController erstellt und auch schon grob alle Http-Methoden implementiert. Dafür habe ich mithilfe von Electron meine Webseite in eine Desktop-App verwandelt. Mehr dazu in Lernperiode-8.
+
+## 16.01.2026
+
+- [ ] Das Speichern des Spielstandes fertig programmieren.
+- [ ] Programmieren, das nach dem Login der zum User gespeicherte Spielstand geladen wird.
+
+
+
 
 
 
