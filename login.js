@@ -3,6 +3,7 @@ const passwordField = document.getElementById("password");
 
 const loginBtn = document.getElementById("loginBtn");
 
+
 let users = [];
 fetch("https://localhost:7224/api/User")
     .then(response => {
@@ -29,6 +30,7 @@ loginBtn.addEventListener("click", (e) => {
   );
 
   if (user) {
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
     alert("Login erfolgreich!");
     location.href = "game.html";
   } else {

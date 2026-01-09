@@ -1,5 +1,7 @@
 let currentMoney = 100000000;
 updateMoney();
+
+
 var map = L.map('map').setView([47.3769, 8.5417], 13);
 
         
@@ -79,6 +81,7 @@ const gameOver = document.getElementById("gameOver");
 const treeBtn = document.getElementById("treeBtn");
 const skillTree = document.getElementById("skillTree");
 const logoutBtn = document.getElementById("logoutBtn");
+const sidebarBtn = document.getElementById("sidebarBtn");
 
 let previewRadius;
 let rangeCircle;
@@ -88,11 +91,18 @@ let target;
 let menuSelected = "building";
 let selectedType = "base";
 let base;
+let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
 
 let unlocked = {
     longrange: 1,
     shortrange: 1
 };
+
+alert(loggedInUser.role)
+if(loggedInUser.role === "user"){
+    sidebarBtn.style.display = "none";
+}
 
 function selectVisuals(element, bg){
     element.style.backgroundColor = bg;
@@ -668,6 +678,22 @@ treeBtn.addEventListener("click", () => {
 
 
 logoutBtn.addEventListener("click", () => {
+
+    fetch("https://localhost:7224/api/Save", {
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringigy({
+            name: "Joshua",
+            money: 150
+        })
+    })
+
+
+
+
+
     location.href = "login.html";
 })
 

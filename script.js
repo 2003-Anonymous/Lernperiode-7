@@ -1,3 +1,3 @@
 function playBtn(){
-    window.location.href="game.html";
+    window.location.href="login.html";
 }
