@@ -31,7 +31,6 @@ loginBtn.addEventListener("click", (e) => {
 
   if (user) {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
-    alert("Login erfolgreich!");
     location.href = "game.html";
   } else {
     alert("Login fehlgeschlagen!");
