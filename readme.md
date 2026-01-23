@@ -95,11 +95,12 @@ Heute habe ich meine API noch weiter ausgebaut. Ich habe begonnen, die SaveGame-
 
 Heute habe ich das Speichern des Spielstandes fertig programmiert und es funktioniert bis jetzt fast einwandfrei. Das einzige Problem, welches ich entdeckt habe, ist, dass wenn man auf der Karte eine zweite Mainbase platziert, verschwindet die erste. Sie existiert aber im Code immer noch und wird gespeichert. Wenn man jetzt sich erneut einloggt, steht plötzlich  zwei mal eine Mainbase auf der Karte. Sonst habe ich noch keine Probleme gefunden, ich bin mir aber sicher, dass es noch welche gibt. Das mit der API hat sehr lange gedauert, weil zuerst hatte ich probleme mit einem Foreignkey, weil der mehrmals vorkam. Auch musste ich die Klasse des SaveGames nochmals anpassen, da es noch eine Referenz zum User benötigte, damit beim Aufrufen des Users auch das SaveGame angezeigt wird.
 
-- [ ] Den Bug mit den vielen Mainbases beheben.
+- [x] Den Bug mit den vielen Mainbases beheben.
 - [ ] Das geladene Spiel auf Fehler überprüfen.
-- [ ] Hinzufügen, dass man beim Einloggen auch einen neuen Benutzer erstellen kann.
-- [ ] Programmieren, dass wenn die Base zerstört wird, der Spielstand gelöscht wird.
+- [x] Hinzufügen, dass man beim Einloggen auch einen neuen Benutzer erstellen kann.
+- [x] Programmieren, dass wenn die Base zerstört wird, der Spielstand gelöscht wird.
 - [ ] Programmieren, dass man durch die Factory z.B. alle 10sek Geld bekommt
+
 
 
 
