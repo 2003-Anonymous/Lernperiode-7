@@ -349,3 +349,22 @@ main{
     color: var(--text-color);
     border: 1px solid var(--highlight);
 }
+
+.leaflet-popup-content-wrapper {
+    background-color: #1e1e1e !important;
+    color: var(--text-color) !important;
+    border-radius: 5px !important;
+    border: 3px solid var(--highlight);
+}
+
+.leaflet-popup-content {
+    margin: 0;
+}
+
+.leaflet-popup-tip {
+    background-color: #1e1e1e !important;
+}
+
+.leaflet-popup-close-button{
+    color: var(--text-color) !important;
+}
