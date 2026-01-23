@@ -9,6 +9,18 @@ namespace MissileSimulator_API.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.SaveGame)
+                .WithOne(p => p.User)
+                .HasForeignKey<SaveGame>(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SaveGame>()
+               .HasMany(s => s.Markers)
+               .WithOne(m => m.SaveGame)
+               .HasForeignKey(m => m.SaveGameId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Missile> Missiles => Set<Missile>();

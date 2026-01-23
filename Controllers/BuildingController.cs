@@ -33,6 +33,7 @@ namespace MissileSimulator_API.Controllers
                         Name = b.Name,
                         Type = b.Type,
                         Category = b.Category,
+                        Income = b.Income,
                         Icon = b.Icon,
                         IconX = b.IconX,
                         IconY = b.IconY,

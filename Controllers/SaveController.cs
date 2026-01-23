@@ -27,7 +27,10 @@ namespace MissileSimulator_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetSave(int id)
         {
-            var save = await _context.SaveGames.FindAsync(id);
+            //Wird benötigt, weil Navigation Properties nicht automatisch geladen werden.
+            var save = await _context.SaveGames
+                .Include(s => s.Markers)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if(save == null)
             {
@@ -38,45 +41,89 @@ namespace MissileSimulator_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostSave(SaveGame save)
+        public async Task<ActionResult> PostSave(SaveGame dto)
         {
+           
+            var existing = await _context.SaveGames
+                .Include(s => s.Markers)
+                .FirstOrDefaultAsync(s => s.UserId == dto.UserId);
+
+            if (existing != null)
+            {
+                existing.Money = dto.Money;
+                existing.ShortrangeStage = dto.ShortrangeStage;
+                existing.LongrangeStage = dto.LongrangeStage;
+
+                _context.Markers.RemoveRange(existing.Markers);
+
+                foreach (var marker in dto.Markers)
+                {
+                    existing.Markers.Add(marker);
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(existing);
+            }
+
+            var save = new SaveGame
+            {
+                Money = dto.Money,
+                UserId = dto.UserId,
+                ShortrangeStage = dto.ShortrangeStage,
+                LongrangeStage = dto.LongrangeStage,
+                Markers = dto.Markers
+            };
+
             _context.SaveGames.Add(save);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(
-                nameof(GetSave),
-                new { id = save.Id },
-                save);
+            return Ok(save);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> PutSave(int id, [FromBody]SaveGame save)
         {
-            _context.Entry(save).State = EntityState.Modified;
+            var existing = await _context.SaveGames
+                .Include(s => s.Markers)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-            try
+            if(existing == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if(!_context.SaveGames.Any(s => s.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            existing.Money = save.Money;
+            existing.ShortrangeStage = save.ShortrangeStage;
+            existing.LongrangeStage = save.LongrangeStage;
+
+            _context.Markers.RemoveRange(existing.Markers);
+
+            foreach(var marker in save.Markers)
+            {
+                existing.Markers.Add(marker);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(save);
         }
+    
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSave()
+        public async Task<ActionResult> DeleteSave(int id)
         {
+            var save = await _context.SaveGames.FindAsync(id);
 
+            if (save == null)
+            {
+                return NotFound();
+            }
+
+            _context.Markers.RemoveRange(save.Markers);
+            _context.SaveGames.Remove(save);
+            await _context.SaveChangesAsync();
+
+            return Ok(save);
         }
     }
 }

@@ -21,16 +21,22 @@ namespace MissileSimulator_API.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+                .Include(u => u.SaveGame)
+                    .ThenInclude(s => s.Markers)
+                .ToListAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.SaveGame)
+                    .ThenInclude(s => s.Markers)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-            if(user == null)
+            if (user == null)
             {
                 return NotFound();
             }

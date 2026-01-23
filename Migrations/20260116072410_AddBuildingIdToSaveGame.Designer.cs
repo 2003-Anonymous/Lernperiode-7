@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MissileSimulator_API.Models;
 
@@ -10,9 +11,11 @@ using MissileSimulator_API.Models;
 namespace MissileSimulator_API.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20260116072410_AddBuildingIdToSaveGame")]
+    partial class AddBuildingIdToSaveGame
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.22");
@@ -158,7 +161,7 @@ namespace MissileSimulator_API.Migrations
                     b.Property<float>("Lng")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("SaveGameId")
+                    b.Property<int>("SaveGameId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -461,20 +464,19 @@ namespace MissileSimulator_API.Migrations
                     b.HasOne("MissileSimulator_API.Models.SaveGame", "SaveGame")
                         .WithMany("Markers")
                         .HasForeignKey("SaveGameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SaveGame");
                 });
 
             modelBuilder.Entity("MissileSimulator_API.Models.SaveGame", b =>
                 {
-                    b.HasOne("MissileSimulator_API.Models.User", "User")
+                    b.HasOne("MissileSimulator_API.Models.User", null)
                         .WithOne("SaveGame")
                         .HasForeignKey("MissileSimulator_API.Models.SaveGame", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MissileSimulator_API.Models.SaveGame", b =>
