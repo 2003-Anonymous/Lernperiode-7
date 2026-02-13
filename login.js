@@ -46,16 +46,17 @@ signinBtn.addEventListener("click", async () => {
 
   let valid;
 
-  users.forEach(u => {
+  for(const u of users){
     if(userInput === u.username){
       valid = false;
       alert("User existiert schon");
+      break;
     }
     else {
       valid = true;
       alert("User wird erstellt");
     }
-  })
+  }
 
   let user = {
     username: userInput,

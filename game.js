@@ -60,6 +60,7 @@ let allBuildingsDefs = [];
 let selectedMissile;
 let selectedBuilding;
 let selectedSilo;
+let spectatedUser;
 const viewer = document.getElementById("modelViewer");
 const menu_missile = document.getElementById("menu_missile");
 const menu_building = document.getElementById("menu_building");
@@ -77,6 +78,7 @@ const treeBtn = document.getElementById("treeBtn");
 const skillTree = document.getElementById("skillTree");
 const logoutBtn = document.getElementById("logoutBtn");
 const sidebarBtn = document.getElementById("sidebarBtn");
+const administrationOverlay = document.getElementById("administration-container");
 
 let previewRadius;
 let rangeCircle;
@@ -96,14 +98,22 @@ let unlocked = {
     shortrange: 1
 };
 
-async function initGame(){
+async function initGame(user){
+
     await loadMissilesFromAPI();
     await loadBuildingsFromAPI();
 
+    map.eachLayer(layer => {
+        if(layer instanceof L.Marker || layer instanceof L.Circle){
+            map.removeLayer(layer);
+        }
+    });
+    placedBuildings = [];
+
     allBuildingsDefs = [...buildings.base, ...buildings.attack, ...buildings.defense];
 
-    if(loggedInUser.saveGame){
-        loadedSave = await loadGame(loggedInUser.saveGame.id);
+    if(user.saveGame){
+        loadedSave = await loadGame(user.saveGame.id);
         SavedMarkers = loadedSave.markers;
         currentMoney = loadedSave.money;
         updateMoney();
@@ -120,7 +130,7 @@ async function initGame(){
         unlockElements(category, "building");
     });
 
-    if(loggedInUser.saveGame){
+    if(user.saveGame){
         loadBuildings(loadedSave);
     }
 }
@@ -662,7 +672,7 @@ function destroyBuilding(building){
     }
 }
 
-const launchBtn = document.getElementById("launchBtn");
+const launchBtn = document.querySelector(".launch-button");
 launchBtn.addEventListener('click', () =>{
     
     if (!target) {
@@ -681,7 +691,7 @@ menu_missile.addEventListener('click', () => {
 
     menuSelected = "missile";
     type_menu.style.display = 'none';
-
+    missileList.innerHTML = "";
     if(selectedSilo){
         if(selectedSilo.type === "shortrange"){
             const shortrangeMissiles = missiles.shortrange;
@@ -699,7 +709,6 @@ menu_missile.addEventListener('click', () => {
 })
 
 menu_building.addEventListener('click', () => {
-    menuSelected = "building";
     type_menu.style.display = 'flex';
     handleClick("base");
     deselectVisuals(menu_missile, "var(--accent-green)");
@@ -837,11 +846,16 @@ if(logoutBtn){
         stopGenerateMoneyFromBuilding();
         clearTimeout(baseTimerId);
 
-        
+        let u;
+        if(spectatedUser != null){
+            u = spectatedUser;
+        } else {
+            u = loggedInUser;
+        }
 
         let save = {
             money: currentMoney,
-            userId: loggedInUser.id,
+            userId: u.id,
             shortrangeStage: unlocked.shortrange,
             longrangeStage: unlocked.longrange,
             markers: placedBuildings
@@ -852,24 +866,24 @@ if(logoutBtn){
             }))
         }
 
-        if(loggedInUser.saveGame == null){
+        if(u.saveGame == null){
             await fetch("https://localhost:7224/api/Save", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(save)
             });
-            alert(JSON.stringify(save, null, 2));
+            //alert(JSON.stringify(save, null, 2));
             console.log(save);
 
         }
         else {
-            await fetch(`https://localhost:7224/api/Save/${loggedInUser.saveGame.id}`, {
+            await fetch(`https://localhost:7224/api/Save/${u.saveGame.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(save)
             });
-            alert("Post");
-            alert(JSON.stringify(save, null, 2));
+            // alert("Post");
+            // alert(JSON.stringify(save, null, 2));
         }
         
         location.href = "login.html";
@@ -882,5 +896,13 @@ async function deleteSave(id){
     });
 }
 
-initGame();
+sidebarBtn.addEventListener("click", () => {
+    administrationOverlay.style.display = "flex";
+    getUsersFromAPI();
+    createUserList(users);
+    stopGenerateMoneyFromBuilding();
+    clearTimeout(baseTimerId);
+})
+
+initGame(loggedInUser);
 //<a href="https://www.flaticon.com/free-icons/missile" title="missile icons">Missile icons created by Nhor Phai - Flaticon</a>

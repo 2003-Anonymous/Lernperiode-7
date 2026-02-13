@@ -35,10 +35,14 @@
         </div>
         <div id="right-Container">
             <div id="top">
-                <button id="treeBtn" type="button">Tree</button>
-                <p id="money">Money: </p>
-                <button id="logoutBtn">Logout</button>
-                <button id="sidebarBtn">III</button>
+                <div class="top-side">
+                    <button id="treeBtn" type="button" class="top-button">Tree</button>
+                    <p id="money">Money: </p>
+                </div>
+                <div class="top-side">
+                    <button id="logoutBtn" class="top-button">Logout</button>
+                    <button id="sidebarBtn" class="top-button">III</button>
+                </div>
             </div>
             
             <div id="map"></div>
@@ -60,9 +64,9 @@
                     <div id="missileStats-Container">
                         <div id="leftContent">
                             <p id="name_label">Name:</p>
-                            <p id="type_label">Typ:</p>
-                            <p id="range_label">Reichweite:</p>
-                            <p id="damage_label">Schaden:</p>
+                            <p id="type_label">Type:</p>
+                            <p id="range_label">Range:</p>
+                            <p id="damage_label">Damage:</p>
                             <p id="radius_label">Radius:</p>
                         </div>
                         <div id="rightContent">
@@ -71,11 +75,52 @@
                             <p id="range_field"></p>
                             <p id="damage_field"></p>
                             <p id="radius_field"></p>
+
+
                         </div>
                     </div>
                     <div id="launch-Container">
-                        <div id="selectedSilo">Silo: </div>
-                        <button id="launchBtn">Launch</button>
+                        
+                        <div class="launch-console">
+                            <div class="console-header">
+                                <p id="selectedSilo">Silo: NO SILO SELECTED</p>
+                            </div>
+
+                            <input type="checkbox" id="arm-switch" />
+                            <input type="checkbox" id="cover-switch" />
+                            <input type="checkbox" id="launch-btn" />
+
+                            <div class="interface">
+                                <div class="status-panel">
+                                    <div class="light" id="power-light">
+                                        <div class="light-indicator"></div>
+                                        <span class="light-label">POWER</span>
+                                    </div>
+                                    <div class="light" id="armed-light">
+                                        <div class="light-indicator"></div>
+                                        <span class="light-label">ARMED</span>
+                                    </div>
+                                    <div class="light" id="launch-light">
+                                        <div class="light-indicator"></div>
+                                         <span class="light-label">LAUNCH</span>
+                                    </div>
+                                </div>
+                                <div class="action-panel">
+                                    <div class="arm-switch-container">
+                                        <span class="on">ON</span>
+                                        <label for="arm-switch" class="toggle-switch-label">
+                                            <div class="toggle-lever"></div>
+                                        </label>
+                                        <span class="off">OFF</span>
+                                    </div>
+                                    <div class="launch-assembly">
+                                        <label for="launch-btn" class="launch-button"></label>
+                                        <label for="cover-switch" class="safety-cover"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     
                 </div>
@@ -100,20 +145,28 @@
 
     <div id="administration-container">
         <div id="adm-header">
-            <button>Back</button>
+            <button id="adm_backBtn">Back</button>
             <h3>Administration</h3>
         </div>
-        <div class="user-container">
-            <p>Username</p>
-            <p>Password</p>
-            <button>Login</button>
-            <button>Delete</button>
+
+        <div id="user-container">
+            <template id="user-template">
+                <div class="user-preview">
+                    <p class="user_username">Username: username</p>
+                    <p class="user_password">Password: *****</p>
+                    <p class="user_id">ID: id</p>
+                    <button class="user_login">Login</button>
+                    <button class="user_delete">Delete</button>
+                </div>
+            </template>
         </div>
+        
     </div>
 
-    <script src="login.js"></script>
-    <script src="game.js"></script>
-    <script src="tree.js"></script>
+    <script src="login.js" defer></script>
+    <script src="game.js" defer></script>
+    <script src="tree.js"defer></script>
+    <script src="administration.js" defer></script>
 </body>
 </html>
 
