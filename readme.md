@@ -99,7 +99,6 @@ Heute habe ich das Speichern des Spielstandes fertig programmiert und es funktio
 ## 23.01.2026
 
 - [x] Den Bug mit den vielen Mainbases beheben.
-- [ ] Das geladene Spiel auf Fehler überprüfen.
 - [x] Hinzufügen, dass man beim Einloggen auch einen neuen Benutzer erstellen kann.
 - [x] Programmieren, dass wenn die Base zerstört wird, der Spielstand gelöscht wird.
 - [x] Programmieren, dass man durch die Factory z.B. alle 10sek Geld bekommt
@@ -107,12 +106,15 @@ Heute habe ich das Speichern des Spielstandes fertig programmiert und es funktio
 Heute habe ich den Bug mit den vielen Mainbases behoben, indem ich einfach die alte Mainbase aus der Gebäudeliste entferne, wenn ich eine neue Platziere. So wird nur eine gespeichert. Dann habe ich noch einen neuen Sign In Button beim Login hinzugefügt. Wenn man oben einen noch nicht existierenden username und ein Passwort eingibt und dann auf Sign In klickt, wird ein neuer Benutzer erstellt. Ich habe aber noch ein neues Problem entdeckt und zwar wird manchmal bei dem Geld im Game "Undefined" oder "NaN" angezeigt, wenn man sich das erste mal ohne Spielstand einloggt. Danach habe ich noch programmiert, dass die Mainbase und die Factory alle 10 Sekunden Geld, basierend auf ihrem "income", produzieren. Dazu wird ein Timer beim platzieren eines dieser Gebäude aktiviert. Wenn man den Spielstand lädt, wird für jedes Gebäude mit einem income auch ein Timer gestartet. Zum Schluss habe ich noch begonnen, einen Administrationsbereich hinzuzufügen, den man nur öffnen kann, wenn man Admin ist. Im Moment ist dieser aber noch immer sichtbar.
 
 
-## 06.02.2026
+## 013.02.2026
 
-- [ ] Programmieren, dass man den Administrationsbereich durch klicken des "III" Buttons öffnen kann (ist nur als Admin sichtbar)
-- [ ] Programmieren, dass dort für jeden Benutzer der Benutzername und das Passwort angezeigt wird.
-- [ ] Einen Button hinzufügen, um einen Benutzer zu löschen
-- [ ] Einen Button hinzufügen, mit dem man sich als einen beliebigen Benutzer einloggen kann.
+- [x] Programmieren, dass man den Administrationsbereich durch klicken des "III" Buttons öffnen kann (ist nur als Admin sichtbar)
+- [x] Programmieren, dass dort für jeden Benutzer der Benutzername und das Passwort angezeigt wird.
+- [x] Einen Button hinzufügen, um einen Benutzer zu löschen
+- [x] Einen Button hinzufügen, mit dem man sich als einen beliebigen Benutzer einloggen kann.
+- [ ] Das geladene Spiel auf Fehler überprüfen.
+- [ ] Diese Fehler beheben
+- [ ] Noch einige Designanpassungen vornehmen. Z.B. den Launchbutton verschönern.
 
 
 
