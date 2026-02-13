@@ -118,7 +118,7 @@ Heute habe ich den Launchbutton durch ein neues Design ersetzt, welches ich auf 
 Ich habe auch noch programmiert, dass wenn man jetzt oben rechts auf den Menubutton(III) klickt, eine Übersicht über alle User mit username und password erhält. Diese User kann man dann per Knopfdruck löschen oder sich als diese User einloggen. Wenn man dann so Gebäude platziert und sich ausloggt, werden diese Gebäude beim richtigen User gespeichert. Das war ein wenig kompliziert, weil ich nicht einfach den eingeloggten User umändern konnte, weil dann könnte man das Menu nicht mehr öffen, da man nicht mehr Admin ist. Ich habe es so gelöst, dass die Variable spectatedUser gesetzt wird, wenn man sich bei einem anderen User einloggt. Beim ausloggen wird dann überprüft, ob ein spectatedUser existiert. Wenn das der Fall ist, wird das Game bei diesem User gespeichert.
 
 
-### Fertiges Projekt
+# Fertiges Projekt
 
 Ich habe einen Missilesimulator programmiert. Man kann sich einloggen oder auch einen neuen User erstellen. In diesem Game kann man verschiedene Gebäude auf einer Karte platzieren, wie z.B. eine Base oder auch ein Shortrange Silo oder Missile Silo. Wenn man ein Silo ausgewählt hat, kann man Racketen auf Städte und Dörfer mit Racketen, welche unterschiedlich grosse Flächen zerstören und Reichweite haben, abschiessen. Dadurch verdient man Geld, je nach dem, wie viele Gebäude zerstört wurden. Mit diesem Geld kann man beim Skilltree verschiedene Stufen kaufen und so neue Racketen und Gebäude freischalten. Wenn man sich ausloggt, wird der Spielstand in gespeichert und wieder aufgerufen, wenn man sich erneut einloggt. Oben rechts wird ein Menubutton sichtbar, falls man als Admin eingeloggt ist. Dort hat man eine übersicht über alle User und kann diese auch löschen oder ihren Spielstand ansehen.
 
@@ -127,31 +127,4 @@ Ich habe einen Missilesimulator programmiert. Man kann sich einloggen oder auch 
 <img width="1906" height="835" alt="image" src="https://github.com/user-attachments/assets/2449aead-f281-4509-a806-aac77dd6f4c0" />
 
 # Reflexion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Bis jetzt ist das mein bestes Projekt. Es hat sehr viel Spass gemacht, all diese Funktionen und auch die API selbst zu programmieren. Ich habe viel neues über html und css gelernt. Z.B. dann man ganz einfach mit der classlist das Aussehen eines Elementes verändern kann. Ich konnte vorallem gut die Verwendung einer API in der Praxis gut lernen. Es war nicht immer ganz einfach und es hat auch nicht alles immer gleich so funktioniert, wie ich es wollte, aber ich konnte alle Probleme lösen. Ich glaube die grösste Schwierigkeit, vorallem am Schluss, war, den Variablen passende Namen zu geben. Am Ende hatte ich nicht mehr so gute Ideen und es war auch schwierig, da ich verschiedene Menus hatte, aber ich konnte ja nicht alle z.B. Menu-Container nennen. Ansonsten bin ich richtig zufrieden mit meinem Projekt und ich habe immer noch viele Ideen, um es noch weiter zu entwickeln. Z.B. gibt es im Moment Airdefenses, welche Racketen abwehren können, aber noch niemanden, ausser einem selbst, vor dem man sich verteidigen müsste. Ich könnte also noch Gegner programmieren, dass es doch eine kleine Herausforderung ist.
