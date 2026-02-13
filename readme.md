@@ -112,9 +112,11 @@ Heute habe ich den Bug mit den vielen Mainbases behoben, indem ich einfach die a
 - [x] Programmieren, dass dort für jeden Benutzer der Benutzername und das Passwort angezeigt wird.
 - [x] Einen Button hinzufügen, um einen Benutzer zu löschen
 - [x] Einen Button hinzufügen, mit dem man sich als einen beliebigen Benutzer einloggen kann.
-- [ ] Das geladene Spiel auf Fehler überprüfen.
-- [ ] Diese Fehler beheben
-- [ ] Noch einige Designanpassungen vornehmen. Z.B. den Launchbutton verschönern.
+- [x] Noch einige Designanpassungen vornehmen. Z.B. den Launchbutton verschönern.
+
+Heute habe ich den Launchbutton durch ein neues Design ersetzt, welches ich auf der Seite UIverse gefunden habe. Auf dieser Seie hat es viele Designbeispiele für Buttons, Forms und so weiter mit HTML- und CSS-Code.
+Ich habe auch noch programmiert, dass wenn man jetzt oben rechts auf den Menubutton(III) klickt, eine Übersicht über alle User mit username und password erhält. Diese User kann man dann per Knopfdruck löschen oder sich als diese User einloggen. Wenn man dann so Gebäude platziert und sich ausloggt, werden diese Gebäude beim richtigen User gespeichert. Das war ein wenig kompliziert, weil ich nicht einfach den eingeloggten User umändern konnte, weil dann könnte man das Menu nicht mehr öffen, da man nicht mehr Admin ist. Ich habe es so gelöst, dass die Variable spectatedUser gesetzt wird, wenn man sich bei einem anderen User einloggt. Beim ausloggen wird dann überprüft, ob ein spectatedUser existiert. Wenn das der Fall ist, wird das Game bei diesem User gespeichert.
+
 
 
 
