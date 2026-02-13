@@ -106,7 +106,7 @@ Heute habe ich das Speichern des Spielstandes fertig programmiert und es funktio
 Heute habe ich den Bug mit den vielen Mainbases behoben, indem ich einfach die alte Mainbase aus der Gebäudeliste entferne, wenn ich eine neue Platziere. So wird nur eine gespeichert. Dann habe ich noch einen neuen Sign In Button beim Login hinzugefügt. Wenn man oben einen noch nicht existierenden username und ein Passwort eingibt und dann auf Sign In klickt, wird ein neuer Benutzer erstellt. Ich habe aber noch ein neues Problem entdeckt und zwar wird manchmal bei dem Geld im Game "Undefined" oder "NaN" angezeigt, wenn man sich das erste mal ohne Spielstand einloggt. Danach habe ich noch programmiert, dass die Mainbase und die Factory alle 10 Sekunden Geld, basierend auf ihrem "income", produzieren. Dazu wird ein Timer beim platzieren eines dieser Gebäude aktiviert. Wenn man den Spielstand lädt, wird für jedes Gebäude mit einem income auch ein Timer gestartet. Zum Schluss habe ich noch begonnen, einen Administrationsbereich hinzuzufügen, den man nur öffnen kann, wenn man Admin ist. Im Moment ist dieser aber noch immer sichtbar.
 
 
-## 013.02.2026
+## 013.02.2026 Abschluss
 
 - [x] Programmieren, dass man den Administrationsbereich durch klicken des "III" Buttons öffnen kann (ist nur als Admin sichtbar)
 - [x] Programmieren, dass dort für jeden Benutzer der Benutzername und das Passwort angezeigt wird.
@@ -118,9 +118,15 @@ Heute habe ich den Launchbutton durch ein neues Design ersetzt, welches ich auf 
 Ich habe auch noch programmiert, dass wenn man jetzt oben rechts auf den Menubutton(III) klickt, eine Übersicht über alle User mit username und password erhält. Diese User kann man dann per Knopfdruck löschen oder sich als diese User einloggen. Wenn man dann so Gebäude platziert und sich ausloggt, werden diese Gebäude beim richtigen User gespeichert. Das war ein wenig kompliziert, weil ich nicht einfach den eingeloggten User umändern konnte, weil dann könnte man das Menu nicht mehr öffen, da man nicht mehr Admin ist. Ich habe es so gelöst, dass die Variable spectatedUser gesetzt wird, wenn man sich bei einem anderen User einloggt. Beim ausloggen wird dann überprüft, ob ein spectatedUser existiert. Wenn das der Fall ist, wird das Game bei diesem User gespeichert.
 
 
+### Fertiges Projekt
 
+Ich habe einen Missilesimulator programmiert. Man kann sich einloggen oder auch einen neuen User erstellen. In diesem Game kann man verschiedene Gebäude auf einer Karte platzieren, wie z.B. eine Base oder auch ein Shortrange Silo oder Missile Silo. Wenn man ein Silo ausgewählt hat, kann man Racketen auf Städte und Dörfer mit Racketen, welche unterschiedlich grosse Flächen zerstören und Reichweite haben, abschiessen. Dadurch verdient man Geld, je nach dem, wie viele Gebäude zerstört wurden. Mit diesem Geld kann man beim Skilltree verschiedene Stufen kaufen und so neue Racketen und Gebäude freischalten. Wenn man sich ausloggt, wird der Spielstand in gespeichert und wieder aufgerufen, wenn man sich erneut einloggt. Oben rechts wird ein Menubutton sichtbar, falls man als Admin eingeloggt ist. Dort hat man eine übersicht über alle User und kann diese auch löschen oder ihren Spielstand ansehen.
 
+![Lernperiode-7](https://github.com/user-attachments/assets/40163ae9-7c6f-4253-98b8-f13eb67b5be8)
 
+<img width="1906" height="835" alt="image" src="https://github.com/user-attachments/assets/2449aead-f281-4509-a806-aac77dd6f4c0" />
+
+# Reflexion
 
 
 
