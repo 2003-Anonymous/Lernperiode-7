@@ -1,8 +1,0 @@
-.vscode/
-bin/
-obj/
-*.user
-*.suo
-*.log
-*.env
-node_modules/
