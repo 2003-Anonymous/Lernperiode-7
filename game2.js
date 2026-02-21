@@ -1,4 +1,4 @@
-let currentMoney = 0;
+let currentMoney = 100000000;
 updateMoney();
 
 
@@ -6,40 +6,48 @@ var map = L.map('map').setView([47.3769, 8.5417], 13);
 
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            //attribution: '© OpenStreetMap-Mitwirkende'
         }).addTo(map);
 
-
+        
+        // L.marker([47.29977627719577, 8.12394213320905]).addTo(map)
+        //     .bindPopup("Oberkulm")
+        //     .openPopup();
 
 let missiles = [];
-async function loadMissilesFromAPI(){
-    try{
-        const res = await fetch("https://localhost:7224/api/Missile");
-        missiles = await res.json();
-    } catch(err){
-        console.error("Missile load failed", err);
-    }
-}
+fetch("https://localhost:7224/api/Missile")
+    .then(response => response.json())
+    .then(data =>{
+        missiles = data;
 
+        unlockElements(missiles.shortrange, "missile");
+        unlockElements(missiles.longrange, "missile");
+    })
+    .catch(error => console.error(error));
 
 let buildings = [];
-async function loadBuildingsFromAPI(){
-    try{
-        const res = await fetch("https://localhost:7224/api/Building")
-        buildings = await res.json();
+fetch("https://localhost:7224/api/Building")
+    .then(response => response.json())
+    .then(data => {
+        buildings = data;
+
+        Object.values(buildings).forEach(category => {
+            unlockElements(category, "building");
+        })
         
         handleClick("base");
-    } catch(err){
-        console.error("Building load failed", err);
-    }
-}
+    })
+    .catch(error => console.error(error));
 
 
-let loadedSave = [];
-async function loadGame(id){
-    const res = await fetch(`https://localhost:7224/api/Save/${id}`);
-        return await res.json();
-}
 
+
+var BaseIcon = L.icon({
+    iconUrl: 'Images/barracks.png',    
+    iconSize: [20, 20],       
+    iconAnchor: [10, 10],     
+    popupAnchor: [0, -40]     
+});
 
 function createIcon(url, x, y){
     var building_icon = L.icon({
@@ -54,13 +62,9 @@ function createIcon(url, x, y){
 let silos = [];
 let targets = [];
 let airdefenses = [];
-let SavedMarkers = [];
-let placedBuildings = [];
-let allBuildingsDefs = [];
 let selectedMissile;
 let selectedBuilding;
 let selectedSilo;
-let spectatedUser;
 const viewer = document.getElementById("modelViewer");
 const menu_missile = document.getElementById("menu_missile");
 const menu_building = document.getElementById("menu_building");
@@ -78,7 +82,6 @@ const treeBtn = document.getElementById("treeBtn");
 const skillTree = document.getElementById("skillTree");
 const logoutBtn = document.getElementById("logoutBtn");
 const sidebarBtn = document.getElementById("sidebarBtn");
-const administrationOverlay = document.getElementById("administration-container");
 
 let previewRadius;
 let rangeCircle;
@@ -88,8 +91,6 @@ let target;
 let menuSelected = "building";
 let selectedType = "base";
 let base;
-let timerIds = [];
-let baseTimerId;
 let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 
@@ -98,136 +99,9 @@ let unlocked = {
     shortrange: 1
 };
 
-async function initGame(user){
-
-    await loadMissilesFromAPI();
-    await loadBuildingsFromAPI();
-
-    map.eachLayer(layer => {
-        if(layer instanceof L.Marker || layer instanceof L.Circle){
-            map.removeLayer(layer);
-        }
-    });
-    placedBuildings = [];
-
-    allBuildingsDefs = [...buildings.base, ...buildings.attack, ...buildings.defense];
-
-    if(user.saveGame){
-        loadedSave = await loadGame(user.saveGame.id);
-        SavedMarkers = loadedSave.markers;
-        currentMoney = loadedSave.money;
-        updateMoney();
-
-
-        unlocked.longrange = loadedSave.longrangeStage;
-        unlocked.shortrange = loadedSave.shortrangeStage;
-    }
-
-    unlockElements(missiles.shortrange, "missile");
-    unlockElements(missiles.longrange, "missile");
-
-    Object.values(buildings).forEach(category => {
-        unlockElements(category, "building");
-    });
-
-    if(user.saveGame){
-        loadBuildings(loadedSave);
-    }
-}
-
-
-function loadBuildings(loadedSave){
-    loadedSave.markers.forEach(m => {
-        const bui = getBuildingById(m.buildingId);
-
-        const latlng = [m.lat, m.lng];
-        const icon = createIcon(bui.icon, bui.iconX, bui.iconY);
-
-        if(bui.category === "attack"){
-            placeSilo(bui, latlng, icon);
-        } 
-        else if(bui.category === "defense"){
-            placeDefense(bui, latlng, icon);
-        }
-        else if(bui.category === "base"){
-
-            if(bui.name === "Mainbase"){
-                const marker = L.marker(latlng, {icon}).addTo(map);
-
-                base = {
-                    ...bui,
-                    marker: marker
-                };
-
-                placedBuildings.push(base);
-            } else {
-                placeBuilding(bui, latlng, icon);
-            }
-            if(bui.income){
-                generateMoneyFromBuilding(bui);
-            }
-        }
-    })
-}
-
-
-function placeSilo(building, latlng, icon){
-    const marker = L.marker(latlng, {icon: icon}).addTo(map);
-
-    const silo = {
-        ...building,
-        marker: marker
-    };
-    silo.name = silo.name + " " + (silos.length + 1);
-    marker.bindPopup(silo.name);
-
-    silos.push(silo);
-    placedBuildings.push(silo);
-}
-
-function placeDefense(building, latlng, icon){
-    const marker = L.marker(latlng, {icon: icon}).addTo(map);
-
-    const rangeCircle = L.circle(latlng, {
-        color: building.name === "Airdefense" ? "yellow" : "blue",
-        fillColor: building.name === "Airdefense" ? "yellow" : "blue",
-        fillOpacity: 0.3,
-        radius: building.range
-    }).addTo(map);
-
-    const defense = {
-        ...building,
-        marker: marker,
-        rangeCircle: rangeCircle
-    };
-    defense.name = airdefenses.name + " " + (airdefenses.length + 1);
-    marker.bindPopup(defense.name);
-
-    airdefenses.push(defense);
-    placedBuildings.push(defense);
-}
-
-function placeBuilding(building, latlng, icon){
-    const marker = L.marker(latlng, {icon: icon}).addTo(map);
-    
-    const bui = {
-        ...building,
-        marker
-    }
-
-    placedBuildings.push(bui);
-}
-
-function getBuildingById(id){
-    return allBuildingsDefs.find(b => b.id === id);
-}
-
-if(loggedInUser.role != "admin"){
+alert(loggedInUser.role)
+if(loggedInUser.role === "user"){
     sidebarBtn.style.display = "none";
-}
-else{
-    currentMoney = 1000000000;
-    updateMoney();
 }
 
 function selectVisuals(element, bg){
@@ -463,33 +337,13 @@ map.on('click', function(e) {
         let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
 
         if(selectedBuilding.name === "Mainbase"){
-            if(base){
-                map.removeLayer(base.marker);
-                const index = placedBuildings.indexOf(base);
-                if(index !== -1){
-                    placedBuildings.splice(index, 1);
-                }
-            }
-            let ma = L.marker(e.latlng, {icon: icon}).addTo(map);
-
-            base = {
-                ...selectedBuilding,
-                marker: ma
-            };
-
-            placedBuildings.push(base);
-            generateMoneyFromBuilding(selectedBuilding);
+            if(base) map.removeLayer(base);
+            base = L.marker(e.latlng, {icon: icon}).addTo(map);
 
         } else if(selectedBuilding.name === "Factory"){
-            let marker = L.marker(e.latlng, {icon: icon}).addTo(map);
-
-            let factory = {
-                ...selectedBuilding,
-                marker: marker
-            };
-
-            placedBuildings.push(factory);
-            generateMoneyFromBuilding(selectedBuilding);
+            let icon = createIcon(selectedBuilding.icon, selectedBuilding.iconX, selectedBuilding.iconY);
+            let factory = L.marker(e.latlng, {icon: icon}).addTo(map);
+            
 
         } else if(selectedBuilding.name === "Missilesilo"){
             
@@ -508,6 +362,7 @@ map.on('click', function(e) {
            createDefense("yellow", e.latlng);
 
         }
+        
     }
 });
 
@@ -519,7 +374,7 @@ function createDefense(color, latlng) {
 
     let object = {
         ...selectedBuilding,
-        marker: marker
+        marker: marker,
     }
 
     let range = L.circle(latlng, {
@@ -532,7 +387,6 @@ function createDefense(color, latlng) {
     object.name = selectedBuilding.name + " " + (airdefenses.length + 1);
     object.rangeCircle = range;
     airdefenses.push(object);
-    placedBuildings.push(object);
 }
 
 function createSilo(latlng) {
@@ -546,7 +400,6 @@ function createSilo(latlng) {
     }
     silo.name = selectedBuilding.name + " " + (silos.length + 1),
     silos.push(silo);
-    placedBuildings.push(silo);
 }
 
 
@@ -618,23 +471,35 @@ function launchMissile(start, target, durationSec = 3){
             missile.remove();
             if(!missileDestroyed){
                 target.radius.setStyle({ fillColor: 'black', color: 'black'});
-                target.center.setStyle({fillColor: 'black', color: 'black'});
+                target.center.setStyle({fillcolor: 'black', color: 'black'});
                 
                 targets = targets.filter(t => t !== target);
 
 
-                let distanceToBase = map.distance(base.marker.getLatLng(), target.center.getLatLng());
+                let distanceToBase = map.distance(base.getLatLng(), target.center.getLatLng());
                 
                 if(distanceToBase <= target.missile.radius){
                     gameOver.style.display = "flex";
                     gameOverOverlay.style.display = "flex";
-                    deleteSave(loggedInUser.saveGame.id);
                 }
 
-                placedBuildings = placedBuildings.filter(b => {
-                    let distanceToB = map.distance(b.marker.getLatLng(), target.center.getLatLng());
-                    if(distanceToB <= target.missile.radius){
-                        destroyBuilding(b);
+                airdefenses = airdefenses.filter(a => {
+                    let distanceToA = map.distance(a.marker.getLatLng(), target.center.getLatLng());
+                    
+                    if(distanceToA <= target.missile.radius){
+                        map.removeLayer(a.marker);
+                        map.removeLayer(a.rangeCircle);
+                        return false;
+                    }
+                    return true;
+                });
+
+                silos = silos.filter(s => {
+                    let distanceToS = map.distance(s.marker.getLatLng(), target.center.getLatLng());
+
+                    if(distanceToS <= target.missile.radius){
+                        map.removeLayer(s.marker);
+                        selectedSilo = null;
                         return false;
                     }
                     return true;
@@ -644,8 +509,11 @@ function launchMissile(start, target, durationSec = 3){
                     .then(hitCount => {
                         alert("Zerstörte Gebäude: " + hitCount);
 
-                        let money = Math.round(hitCount * target.missile.warhead / 1000);
+                        let money = hitCount * target.missile.warhead / 1000;
+                        Math.round(money);
                         generateIncome(money);
+
+                        
                     });
             
             }
@@ -655,24 +523,7 @@ function launchMissile(start, target, durationSec = 3){
     
 }
 
-function destroyBuilding(building){
-    if(building.marker){
-        map.removeLayer(building.marker);
-    }
-
-    if(building.rangeCircle){
-        map.removeLayer(rangeCircle);
-    }
-
-    silos = silos.filter(s => s !== building);
-    airdefenses = airdefenses.filter(a => a !== building);
-
-    if(selectedSilo === building){
-        selectedSilo = null;
-    }
-}
-
-const launchBtn = document.querySelector(".launch-button");
+const launchBtn = document.getElementById("launchBtn");
 launchBtn.addEventListener('click', () =>{
     
     if (!target) {
@@ -691,7 +542,7 @@ menu_missile.addEventListener('click', () => {
 
     menuSelected = "missile";
     type_menu.style.display = 'none';
-    missileList.innerHTML = "";
+
     if(selectedSilo){
         if(selectedSilo.type === "shortrange"){
             const shortrangeMissiles = missiles.shortrange;
@@ -709,6 +560,7 @@ menu_missile.addEventListener('click', () => {
 })
 
 menu_building.addEventListener('click', () => {
+    menuSelected = "building";
     type_menu.style.display = 'flex';
     handleClick("base");
     deselectVisuals(menu_missile, "var(--accent-green)");
@@ -734,7 +586,7 @@ searchField.addEventListener('input', () =>{
     const newList = [];
 
     if(menuSelected === "missile"){
-        [...missiles.shortrange, ...missiles.longrange].forEach((element) => {
+        missiles.forEach((element) => {
             let name = element.name.toLowerCase();
             if(name.includes(input)){
                 newList.push(element);
@@ -781,7 +633,10 @@ function handleClick(type){
     }
 }
 
-async function getBuildings(latlng, radius) {
+
+
+
+function getBuildings(latlng, radius) {
     const overpassUrl = "https://overpass-api.de/api/interpreter";
     const query = `
         [out:json][timeout:5];
@@ -803,24 +658,6 @@ async function getBuildings(latlng, radius) {
         });
 }
 
-function generateMoneyFromBuilding(building){
-    generateIncome(building.income);
-    if(building.name === "Mainbase"){
-        if(baseTimerId){
-            clearTimeout(baseTimerId);
-        }
-        baseTimerId = setTimeout(() => generateMoneyFromBuilding(building), 10000);
-    } else {
-        timerIds.push(setTimeout(() => generateMoneyFromBuilding(building), 10000));
-    }
-    
-}
-
-function stopGenerateMoneyFromBuilding(){
-    timerIds.forEach(t =>{
-        clearTimeout(t);
-    })
-}
 
 function generateIncome(income) {
     currentMoney += income;
@@ -839,70 +676,63 @@ treeBtn.addEventListener("click", () => {
     buildTrees();
 })
 
-if(logoutBtn){
 
-    logoutBtn.addEventListener("click", async () => {
+logoutBtn.addEventListener("click", () => {
 
-        stopGenerateMoneyFromBuilding();
-        clearTimeout(baseTimerId);
-
-        let u;
-        if(spectatedUser != null){
-            u = spectatedUser;
-        } else {
-            u = loggedInUser;
-        }
-
-        let save = {
-            money: currentMoney,
-            userId: u.id,
-            shortrangeStage: unlocked.shortrange,
-            longrangeStage: unlocked.longrange,
-            markers: placedBuildings
-                .map(b => ({
-                    buildingId: b.id,
-                    lat: b.marker.getLatLng().lat,
-                    lng: b.marker.getLatLng().lng,
-            }))
-        }
-
-        if(u.saveGame == null){
-            await fetch("https://localhost:7224/api/Save", {
-                method: "POST", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(save)
-            });
-            //alert(JSON.stringify(save, null, 2));
-            console.log(save);
-
-        }
-        else {
-            await fetch(`https://localhost:7224/api/Save/${u.saveGame.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(save)
-            });
-            // alert("Post");
-            // alert(JSON.stringify(save, null, 2));
-        }
-        
-        location.href = "login.html";
+    fetch("https://localhost:7224/api/Save", {
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringigy({
+            name: "Joshua",
+            money: 150
+        })
     })
-}
 
-async function deleteSave(id){
-    await fetch(`https://localhost:7224/api/Save/${id}`, {
-        method: "DELETE"
-    });
-}
 
-sidebarBtn.addEventListener("click", () => {
-    administrationOverlay.style.display = "flex";
-    getUsersFromAPI();
-    createUserList(users);
-    stopGenerateMoneyFromBuilding();
-    clearTimeout(baseTimerId);
+
+
+
+    location.href = "login.html";
 })
 
-initGame(loggedInUser);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //<a href="https://www.flaticon.com/free-icons/missile" title="missile icons">Missile icons created by Nhor Phai - Flaticon</a>

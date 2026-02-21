@@ -1,10 +1,29 @@
 :root {
-  --bg-color: #0a192f;
-  --accent-blue: #1e3a8a;
-  --metal-silver: #a0a0a0;
+  --bg-color: #072011;
+  --accent-green: #004D26;
+  --metal-silver: #363636;
   --metal-gradient: linear-gradient(145deg, #9ea7b0, #c0c5cc);
-  --text-color: #e2e8f0;
-  --highlight: #3b82f6;
+  --text-color: #32FF32;
+  --highlight: #39FF14;
+  --panel-color: #d1d1c8;
+  --panel-shadow: #b0b0a8;
+  --dark-grey: #4a4a4a;
+  --text-color: #2a2a2a;
+  --safe-green: #29a329;
+  --armed-amber: #ffc107;
+  --launch-red: #d90429;
+}
+
+@keyframes pulse-red {
+  0%,
+  100% {
+    background: var(--launch-red);
+    box-shadow: 0 0 10px var(--launch-red);
+  }
+  50% {
+    background: #ff1f4e;
+    box-shadow: 0 0 20px 5px #ff1f4e;
+  }
 }
 
 *{
@@ -13,8 +32,9 @@
 html, body{
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100dvh;
     width: 100%;
+    overflow: auto;
 }
 
 body{
@@ -23,7 +43,7 @@ body{
 }
 
 main{
-    height: 100%;
+    flex: 1;
     width: 100%;
     background-color: var(--bg-color);
     display: flex;
@@ -38,16 +58,6 @@ main{
     border: 10px solid var(--metal-silver);
 }
 
-#missile-Container li{
-    height: 20px;
-    background-color: var(--accent-blue);
-    color: var(--metal-silver);
-}
-
-#missile-Container li:hover{
-    background-color: var(--highlight);
-    color: black;
-}
 
 #right-Container{
     flex: 1;
@@ -59,6 +69,10 @@ main{
     flex: 2;
     border-top: 10px solid var(--metal-silver);
     border-right: 10px solid var(--metal-silver);
+}
+
+#money{
+    color: var(--text-color);
 }
 
 #selectedMissile{
@@ -75,14 +89,30 @@ main{
     background-color: orange;
     height: 10%;
     width: 100%;
-    margin-bottom: 0;
 }
 
 #searchField{
+    background-color: var(--accent-green);
+    color: var(--text-color);
     height: 100%;
     width: 100%;
-    border-bottom: 10px solid var(--metal-silver);
     box-sizing: none;
+    border: 2px solid var(--bg-color);
+    border-bottom: 10px solid var(--metal-silver);
+}
+
+#searchField:focus{
+    outline: none;
+}
+
+#searchField::placeholder{
+    color: var(--text-color);
+    opacity: 1;
+}
+
+#searchField::-webkit-search-cancel-button{
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 #model{
@@ -94,18 +124,65 @@ main{
 #missileStats-Container{
     display: flex;
     flex-direction: row;
-    width: 50%;
-    height: 100%;
-    padding-left: 50px;
-    padding-right: 50px;
+    width: 40%;
+    padding-left: 10px;
+    padding-right: 0px;
+    margin-right: 50px;
     background-color: var(--bg-color);
-    color: var(--metal-silver);
+    color: var(--text-color);
+}
+
+#type_menu{
+    width: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid var(--highlight);
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: -2px;
+}
+
+.type{
+    width: 100%;
+    flex: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+.type:hover{
+    background-color: var(--highlight);
+    color: var(--bg-color);
+    cursor: pointer;
+}
+
+
+#type_attack{
+    border-bottom: 2px solid var(--highlight);
+    border-top: 2px solid var(--highlight);
+}
+
+#missileList-Container{
+    width: 100%;
+    display: flex;
+    height: 428px;
+    flex-direction: row;
 }
 
 #missileList{
     list-style-type: none;
     width: 100%;
+    height: 100%;
     padding: 0;
+    overflow-y: auto;
+    margin-top: 0;
 }
 
 #missileList li{
@@ -114,23 +191,408 @@ main{
     height: 30px;
     display: flex;
     align-items: center;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--highlight);
+}
+
+.locked{
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
+
+#missileList li:hover{
+    background-color: var(--highlight);
+    color: black;
+    cursor: pointer;
+}
+
+#missileList::-webkit-scrollbar {
+    width: 10px;
+}
+
+#missileList::-webkit-scrollbar-track {
+    background-color: var(--accent-green);
+    border: 1px solid var(--highlight);
+}
+
+#missileList::-webkit-scrollbar-thumb { 
+    background-color: var(--bg-color);
+    border: 1px solid var(--highlight);
 }
 
 #rightContent{
     margin-left: 30px;
 }
 
-#contextMenu{
-    width: 100px;
-    height: 100px;
-    z-index: 1000;
+#launchBtn:hover{
+    background-color: #FF2B2B;
+    color:#8B0000;
+    border-color: #8B0000;
+    cursor: pointer;
 }
 
-.menu-item:hover{
-    background-color: var(--highlight);
+#launch-Container{
+    background-color: var(--bg-color);
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: center;
 }
 
-#launchBtn{
-    width: 50px;
+#menu-Container{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    width: 100%;
+    background-color: var(--metal-silver);
+    justify-content: space-evenly;
+}
+
+.menu_block{
+    background-color: var(--accent-green);
+    color: var(--text-color);
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: large;
+    transition: 0.3s;
+    margin-bottom: 10px;
+    border: 2px solid var(--bg-color);
+    border-radius: 7px;
+}
+
+.menu_block:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+#selectedSilo{
+    margin-right: 0px;
+    margin-top: 10px;
+    width: 100%;
+    font-size: 20px
+}
+
+#gameOverOverlay{
+    position: fixed;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+#gameOver{
+    z-index: 10000;
+    height: 50%;
+    width: 50%;
+    background-color: #8B0000;
+    color: #FF2B2B;
+    border: 10px solid #FF2B2B;
+    border-radius: 20px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+#gameOver:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+#top{
     height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-side{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#skillTree{
+    background-color: var(--bg-color);
+    display: none;
+    position: fixed;
+    margin: 0;
+    padding: 20px;
+    z-index: 100000;
+    height: 100%;
+    width: 100%;
+}
+
+.top-button{
+    background-color: var(--accent-green);
+    color: var(--text-color);
+    border: 1px solid var(--highlight);
+    margin-right: 10px;
+    margin-left: 10px;
+    transition: 0.3s;
+}
+
+.top-button:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: #1e1e1e !important;
+    color: var(--text-color) !important;
+    border-radius: 5px !important;
+    border: 3px solid var(--highlight);
+}
+
+.leaflet-popup-content {
+    margin: 0;
+}
+
+.leaflet-popup-tip {
+    background-color: #1e1e1e !important;
+}
+
+.leaflet-popup-close-button{
+    color: var(--text-color) !important;
+}
+
+
+
+
+
+
+.launch-console {
+  width: 310px;
+  background: var(--panel-color);
+  border: 3px solid #1a1a1a;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow:
+    0 15px 25px rgba(0, 0, 0, 0.4),
+    inset 0 3px 5px rgba(255, 255, 255, 0.4);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVpaWl5eXlscHB6enp4eHhwcHCFhoaAgIB+fn53d3dLS0soKChPT09DQ0Nvb29zc3NwcHB9fX14eHhmZmb0VsS5AAAAFElEQVR42mP8/x8BEwMTAxMBcwATFGCAkP8P8xQAAAAASUVORK5CYII=");
+  background-blend-mode: multiply;
+  transform: scale(0.6);
+  margin-top: 0px;
+}
+
+.console-header {
+  text-align: center;
+  border-bottom: 2px solid var(--dark-grey);
+  padding-bottom: 15px;
+}
+.console-header h2 {
+  font-family: "Orbitron", sans-serif;
+  margin: 0 0 5px 0;
+  color: var(--text-color);
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+.console-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.interface {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 20px;
+}
+
+.status-panel {
+  background: #c1c1b8;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.light {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.light-indicator {
+  width: 15px;
+  height: 15px;
+  background: radial-gradient(circle at 30% 30%, #888, #444);
+  border-radius: 50%;
+  border: 2px solid #2a2a2a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+.light-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark-grey);
+}
+
+.action-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arm-switch-container {
+  text-align: center;
+  position: relative;
+  width: 60px;
+  height: 80px;
+  background: var(--dark-grey);
+  border-radius: 5px;
+  padding-top: 5px;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arm-switch-container span {
+  font-size: 10px;
+  color: #ccc;
+  font-weight: 700;
+}
+.arm-switch-container span.on {
+  margin-bottom: 33px;
+}
+
+.toggle-switch-label {
+  position: absolute;
+  top: 25px;
+  left: 5px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  perspective: 200px;
+}
+
+.toggle-lever {
+  position: absolute;
+  width: 20px;
+  height: 40px;
+  background: linear-gradient(#e0e0e0, #b0b0b0);
+  border-radius: 3px;
+  left: 15px;
+  bottom: 0;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  transform-origin: bottom center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.launch-assembly {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  perspective: 500px;
+}
+
+.launch-button {
+  width: 80px;
+  height: 80px;
+  background: #999;
+  border-radius: 50%;
+  cursor: not-allowed;
+  border: 5px solid #777;
+  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.safety-cover {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  background: repeating-linear-gradient(
+    45deg,
+    #ffc107,
+    #ffc107 15px,
+    #2a2a2a 15px,
+    #2a2a2a 30px
+  );
+  border-radius: 5px;
+  border: 3px solid #1a1a1a;
+  border-top: none;
+  transform-origin: top center;
+  transition: transform 0.4s ease-in-out;
+  cursor: not-allowed;
+}
+.safety-cover::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: #333;
+  border-radius: 2px;
+  border: 2px solid #1a1a1a;
+}
+
+.launch-console input[type="checkbox"] {
+  display: none;
+}
+
+#arm-switch:checked ~ .interface .status-panel #power-light .light-indicator {
+  background: var(--safe-green);
+  box-shadow: 0 0 10px var(--safe-green);
+}
+#arm-switch:checked ~ .interface .action-panel .toggle-lever {
+  transform: rotateX(180deg);
+}
+#arm-switch:checked ~ .interface .action-panel .safety-cover {
+  cursor: pointer;
+}
+#arm-switch:checked ~ .interface .status-panel #armed-light .light-indicator {
+  background: var(--armed-amber);
+  box-shadow: 0 0 10px var(--armed-amber);
+}
+
+#arm-switch:checked
+  + #cover-switch:checked
+  ~ .interface
+  .action-panel
+  .safety-cover {
+  transform: rotateX(160deg);
+}
+#arm-switch:checked
+  + #cover-switch:checked
+  ~ .interface
+  .action-panel
+  .launch-button {
+  background: var(--launch-red);
+  border-color: #a1031d;
+  cursor: pointer;
+}
+
+.launch-button:active {
+  transform: scale(0.95);
+  box-shadow: inset 0 8px 12px rgba(0, 0, 0, 0.5);
+}
+#arm-switch:checked
+  + #cover-switch:checked
+  + #launch-btn:checked
+  ~ .interface
+  .status-panel
+  #launch-light
+  .light-indicator {
+  animation: pulse-red 1s infinite;
 }
