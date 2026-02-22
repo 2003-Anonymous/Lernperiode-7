@@ -1,4 +1,5 @@
-let currentMoney = 0;
+import Player from "./models/Player.js";
+
 updateMoney();
 
 
@@ -91,12 +92,18 @@ let base;
 let timerIds = [];
 let baseTimerId;
 let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+let player;
 
+// let unlocked = {
+//     longrange: 1,
+//     shortrange: 1
+// };
 
-let unlocked = {
-    longrange: 1,
-    shortrange: 1
-};
+function createPlayerObject(u){
+    const player = new Player(u.id, u.username, u.role);
+
+    return player;
+}
 
 async function initGame(user){
 
@@ -112,15 +119,18 @@ async function initGame(user){
 
     allBuildingsDefs = [...buildings.base, ...buildings.attack, ...buildings.defense];
 
+    player = createPlayerObject(user);
+
     if(user.saveGame){
         loadedSave = await loadGame(user.saveGame.id);
-        SavedMarkers = loadedSave.markers;
-        currentMoney = loadedSave.money;
+        player.buildings = loadedSave.markers;
+        player.money = loadedSave.money;
         updateMoney();
 
+        player.saveGame = true;
 
-        unlocked.longrange = loadedSave.longrangeStage;
-        unlocked.shortrange = loadedSave.shortrangeStage;
+        player.longrange = loadedSave.longrangeStage;
+        player.shortrange = loadedSave.shortrangeStage;
     }
 
     unlockElements(missiles.shortrange, "missile");
@@ -182,7 +192,7 @@ function placeSilo(building, latlng, icon){
     marker.bindPopup(silo.name);
 
     silos.push(silo);
-    placedBuildings.push(silo);
+    player.buildings.push(silo);
 }
 
 function placeDefense(building, latlng, icon){
@@ -204,7 +214,7 @@ function placeDefense(building, latlng, icon){
     marker.bindPopup(defense.name);
 
     airdefenses.push(defense);
-    placedBuildings.push(defense);
+    player.buildings.push(defense);
 }
 
 function placeBuilding(building, latlng, icon){
@@ -215,18 +225,18 @@ function placeBuilding(building, latlng, icon){
         marker
     }
 
-    placedBuildings.push(bui);
+    player.buildings.push(bui);
 }
 
 function getBuildingById(id){
     return allBuildingsDefs.find(b => b.id === id);
 }
 
-if(loggedInUser.role != "admin"){
+if(player.role != "admin"){
     sidebarBtn.style.display = "none";
 }
 else{
-    currentMoney = 1000000000;
+    player.money = 1000000000;
     updateMoney();
 }
 
@@ -245,14 +255,14 @@ selectVisuals(menu_building, "var(--highlight)");
 function unlockElements(list, t){
     if(t === "missile"){
         list.forEach(missile => {
-            if(missile.stage <= unlocked[missile.type]){
+            if(missile.stage <= player[missile.type]){
                 missile.unlocked = true;
             }
         });
     }
 
     if(t === "building"){
-        const totalUnlockedStages = unlocked.shortrange + unlocked.longrange;
+        const totalUnlockedStages = player.shortrange + player.longrange;
 
         list.forEach(building => {
             if(building.stage <= totalUnlockedStages){
@@ -546,7 +556,7 @@ function createSilo(latlng) {
     }
     silo.name = selectedBuilding.name + " " + (silos.length + 1),
     silos.push(silo);
-    placedBuildings.push(silo);
+    player.buildings.push(silo);
 }
 
 
@@ -823,15 +833,20 @@ function stopGenerateMoneyFromBuilding(){
 }
 
 function generateIncome(income) {
-    currentMoney += income;
-    currentMoney = Math.round(currentMoney);
+    player.money += income;
+    player.money = Math.round(player.money);
     
     updateMoney();
 }
 
 function updateMoney(){
     const money = document.getElementById("money");
-    money.textContent = `Money: ${currentMoney}`;
+    if(money.textContent === null){
+        money.textContent = "MOney: 0";
+    }
+    else {
+        money.textContent = `Money: ${player.money}`;
+    }
 }
 
 treeBtn.addEventListener("click", () => {
@@ -850,15 +865,15 @@ if(logoutBtn){
         if(spectatedUser != null){
             u = spectatedUser;
         } else {
-            u = loggedInUser;
+            u = player;
         }
 
         let save = {
-            money: currentMoney,
+            money: u.money,
             userId: u.id,
-            shortrangeStage: unlocked.shortrange,
-            longrangeStage: unlocked.longrange,
-            markers: placedBuildings
+            shortrangeStage: u.shortrange,
+            longrangeStage: u.longrange,
+            markers: u.buildings
                 .map(b => ({
                     buildingId: b.id,
                     lat: b.marker.getLatLng().lat,
@@ -866,13 +881,12 @@ if(logoutBtn){
             }))
         }
 
-        if(u.saveGame == null){
+        if(u.saveGame === false){
             await fetch("https://localhost:7224/api/Save", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(save)
             });
-            //alert(JSON.stringify(save, null, 2));
             console.log(save);
 
         }
@@ -882,8 +896,6 @@ if(logoutBtn){
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(save)
             });
-            // alert("Post");
-            // alert(JSON.stringify(save, null, 2));
         }
         
         location.href = "login.html";
