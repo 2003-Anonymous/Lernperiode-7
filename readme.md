@@ -10,9 +10,9 @@
 
 ## 24.10.25
 
-- [ ] Arbeitspaket 1: Erstellen Sie mehrere Skizzen von Ihrem *front end*. Überlegen Sie sich auch, welche Elemente die Interaktion mit dem *back end* auslösen und wie sich die Oberfläche dadurch verändert. Bauen Sie auch Interaktionen ein, die *keinen* Aufruf der API benötigen, sondern sich im *client* bearbeiten lassen (sortieren, suchen etc.)
-- [ ] Arbeitspaket 2: Setzen Sie in HTML und CSS Ihren Entwurf auf rudimentäre Weise um.
-- [ ] Arbeitspaket 3: Schreiben Sie ersten JS-Code als *proof of concept* (bspw. Meldung bei Klick auf Knopf-Element)
+- [x] Arbeitspaket 1: Erstellen Sie mehrere Skizzen von Ihrem *front end*. Überlegen Sie sich auch, welche Elemente die Interaktion mit dem *back end* auslösen und wie sich die Oberfläche dadurch verändert. Bauen Sie auch Interaktionen ein, die *keinen* Aufruf der API benötigen, sondern sich im *client* bearbeiten lassen (sortieren, suchen etc.)
+- [x] Arbeitspaket 2: Setzen Sie in HTML und CSS Ihren Entwurf auf rudimentäre Weise um.
+- [x] Arbeitspaket 3: Schreiben Sie ersten JS-Code als *proof of concept* (bspw. Meldung bei Klick auf Knopf-Element)
 
 Heute habe ich eine Skizze meiner verschiedenen HTML-Seiten erstellt und ich habe auch noch das grobe Gerüste der Start- und Hautpseite programmiert. Dann habe ich mit der API OpenStreetMap eine Karte und einen Marker auf meiner Webseite hinzugefügt. Die Karte kann man herein und herauszoomen und auch andere Länder anschauen. Dann habe ich noch eine kurze Liste mit 5 intercontinental ballistic missiles(ICBMs) als Beispiele geschrieben. Daraus werden dann in der Schleife darunter li-Elemente erstellt und auf der Seite angezeigt. Diese Schleife konnte ich von meiner letzten Seite wiederverwenden.
 
@@ -128,3 +128,21 @@ Ich habe einen Missilesimulator programmiert. Man kann sich einloggen oder auch 
 
 # Reflexion
 Bis jetzt ist das mein bestes Projekt. Es hat sehr viel Spass gemacht, all diese Funktionen und auch die API selbst zu programmieren. Ich habe viel neues über html und css gelernt. Z.B. dann man ganz einfach mit der classlist das Aussehen eines Elementes verändern kann. Ich konnte vorallem gut die Verwendung einer API in der Praxis gut lernen. Es war nicht immer ganz einfach und es hat auch nicht alles immer gleich so funktioniert, wie ich es wollte, aber ich konnte alle Probleme lösen. Ich glaube die grösste Schwierigkeit, vorallem am Schluss, war, den Variablen passende Namen zu geben. Am Ende hatte ich nicht mehr so gute Ideen und es war auch schwierig, da ich verschiedene Menus hatte, aber ich konnte ja nicht alle z.B. Menu-Container nennen. Ansonsten bin ich richtig zufrieden mit meinem Projekt und ich habe immer noch viele Ideen, um es noch weiter zu entwickeln. Z.B. gibt es im Moment Airdefenses, welche Racketen abwehren können, aber noch niemanden, ausser einem selbst, vor dem man sich verteidigen müsste. Ich könnte also noch Gegner programmieren, dass es doch eine kleine Herausforderung ist.
+
+
+## Weiterentwicklung
+
+### Bekannte Bugs
+- [ ] Bestimmte Gebäude werden beim Spielstart als "gelocked" markiert und sind erst verfügbar, wenn man den Tab wechselt und zurück wechselt.
+- [ ] Wenn die Base zerstört wird, ist der gesammte Tree freigeschaltet
+- [ ] Wenn die Base zerstört wird, wird das Geld als "NaN" dargestellt.
+- [ ] Die Base kann, wenn man einen Spielstand lädt, der bereits eine Base hat, mehrmals platziert werden.
+- [ ] Wenn man eine Base platziert, bekommt man gleich Geld, da die Base Geld generiert. Durch schnelles klicken kann so einfach Geld verdient werden.
+
+### Features in Arbeit
+- [ ] AI Gegner
+- [ ] Neue Gebäude (mehr Fabriken, Radar, andere Basentypen)
+- [ ] Fahrzeuge (Panzer, Flugzeuge, Helikopter)
+- [ ] Truppen
+- [ ] Gebäude kosten Geld, um gebaut zu werden
+- [ ] Gebäude können abgerissen werden
