@@ -130,7 +130,7 @@ Ich habe einen Missilesimulator programmiert. Man kann sich einloggen oder auch 
 Bis jetzt ist das mein bestes Projekt. Es hat sehr viel Spass gemacht, all diese Funktionen und auch die API selbst zu programmieren. Ich habe viel neues über html und css gelernt. Z.B. dann man ganz einfach mit der classlist das Aussehen eines Elementes verändern kann. Ich konnte vorallem gut die Verwendung einer API in der Praxis gut lernen. Es war nicht immer ganz einfach und es hat auch nicht alles immer gleich so funktioniert, wie ich es wollte, aber ich konnte alle Probleme lösen. Ich glaube die grösste Schwierigkeit, vorallem am Schluss, war, den Variablen passende Namen zu geben. Am Ende hatte ich nicht mehr so gute Ideen und es war auch schwierig, da ich verschiedene Menus hatte, aber ich konnte ja nicht alle z.B. Menu-Container nennen. Ansonsten bin ich richtig zufrieden mit meinem Projekt und ich habe immer noch viele Ideen, um es noch weiter zu entwickeln. Z.B. gibt es im Moment Airdefenses, welche Racketen abwehren können, aber noch niemanden, ausser einem selbst, vor dem man sich verteidigen müsste. Ich könnte also noch Gegner programmieren, dass es doch eine kleine Herausforderung ist.
 
 
-## Weiterentwicklung
+# Weiterentwicklung
 
 ### Bekannte Bugs
 - [ ] Bestimmte Gebäude werden beim Spielstart als "gelocked" markiert und sind erst verfügbar, wenn man den Tab wechselt und zurück wechselt.
